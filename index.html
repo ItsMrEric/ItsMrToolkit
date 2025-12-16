@@ -20,6 +20,7 @@
             box-sizing: border-box
         }
 
+
         body {
             margin: 0;
             padding: 70px 20px;
@@ -87,6 +88,8 @@
             box-shadow: 0 0 40px rgba(0, 246, 255, .15);
             position: relative;
         }
+
+
 
         /* corner accents */
         section::before,
@@ -173,18 +176,23 @@
             color: #cfefff;
             opacity: .88;
         }
-        .email-glitch {
-            display: inline-block;
-            font-weight: 700;
-            color: #00ffff;
-            position: relative;
+.email-glitch {
+    display: inline-block;
+    font-weight: 700;
+    color: #00ffff;
+    position: relative;
+    cursor: pointer;
 
-            text-shadow:
-                0 0 8px #00ffff,
-                0 0 18px rgba(0,255,255,.6);
+    text-shadow:
+        0 0 8px #00ffff,
+        0 0 18px rgba(0,255,255,.6);
 
-            cursor: pointer;
-        }
+    transition:
+        color 0.35s ease,
+        text-shadow 0.35s ease,
+        transform 0.25s ease,
+        filter 0.35s ease;
+}
 
         .scan-layer {
             position: absolute;
@@ -230,7 +238,7 @@
             transform: translateX(-200%);
             opacity: 0;
             mix-blend-mode: screen;
-            
+            transition: opacity 0.4s ease;
         }
 
         /* scanning light ONLY when active */
@@ -240,40 +248,42 @@
 
 
 
-        @keyframes scan {
-            0% {
-                transform: translateX(-40%);
-                opacity: 0;
-            }
-            10% {
-                opacity: .85;
-            }
-            80% {
-                opacity: .85;
-            }
-            100% {
-                transform: translateX(40%);
-                opacity: 0;
-            }
-        }
+@keyframes scan {
+    0% {
+        transform: translateX(-40%);
+        opacity: 0;
+    }
+    15% {
+        opacity: .85;
+    }
+    85% {
+        opacity: .85;
+    }
+    100% {
+        transform: translateX(40%);
+        opacity: 0;
+    }
+}
 
 
 
 
-        .email-glitch:hover {
-            color: #ffffff;
-            text-shadow:
-                0 0 12px #00ffff,
-                0 0 30px #00ffff,
-                0 0 60px #a855ff;
-        }
-        .email-glitch:active {
-            color: #00ffff;
-            text-shadow:
-                0 0 12px #00ffff,
-                0 0 30px #00ffff,
-                0 0 60px #a855ff;
-        }
+
+.email-glitch:hover {
+    color: #ffffff;
+    text-shadow:
+        0 0 12px #00ffff,
+        0 0 30px #00ffff,
+        0 0 60px #a855ff;
+
+    transform: translateY(-2px);
+}
+
+.email-glitch:active {
+    transform: translateY(0) scale(0.96);
+    filter: brightness(1.15);
+}
+
 
 
         @media(prefers-reduced-motion:reduce) {
@@ -282,10 +292,89 @@
                 transition: none !important
             }
         }
+        /* =========================
+   SIDE DECORATIONS
+========================= */
+.side-decor {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    width: 120px;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.side-decor.left {
+    left: 0;
+}
+
+.side-decor.right {
+    right: 0;
+}
+
+/* shared shape style */
+.side-decor::before,
+.side-decor::after {
+    content: "";
+    position: absolute;
+    opacity: 0.25;
+    filter: drop-shadow(0 0 12px var(--accent));
+}
+
+/* circle */
+.side-decor::before {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    border: 2px solid var(--accent);
+    top: 20%;
+}
+
+/* square */
+.side-decor::after {
+    width: 60px;
+    height: 60px;
+    border: 2px solid var(--accent2);
+    bottom: 25%;
+    transform: rotate(45deg);
+}
+
+/* offsets per side */
+.side-decor.left::before {
+    left: 30px;
+}
+
+.side-decor.left::after {
+    left: 10px;
+}
+
+.side-decor.right::before {
+    right: 30px;
+}
+
+.side-decor.right::after {
+    right: 10px;
+}
+
+/* subtle floating animation */
+@keyframes float {
+    from { transform: translateY(0) rotate(45deg); }
+    to   { transform: translateY(-20px) rotate(45deg); }
+}
+
+.side-decor::after {
+    animation: float 6s ease-in-out infinite alternate;
+}
+.side-decor::before {
+    animation: float 8s ease-in-out infinite alternate-reverse;
+}
+
     </style>
 </head>
 
 <body>
+<div class="side-decor left"></div>
+<div class="side-decor right"></div>
 
     <h1>ItsMrToolkit</h1>
     <h3>
@@ -298,7 +387,7 @@
 
     </h3>
     <script>
-        const emailText = "Minecrowaver@outlook.com";
+        const emailText = "itsmreric@outlook.com";
         const emailEl = document.getElementById("email");
 
         let i = 0;
