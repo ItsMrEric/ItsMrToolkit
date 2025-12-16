@@ -1,0 +1,13 @@
+<script>
+async function selfUpdate() {
+    const res = await fetch("https://raw.githubusercontent.com/ItsMrEric/ItsMrToolkit/refs/heads/main/index.html", {
+        cache: "no-store"
+    });
+    const html = await res.text();
+
+    document.open();
+    document.write(html);
+    document.close();
+}
+selfUpdate()
+</script>
