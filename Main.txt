@@ -1,0 +1,112 @@
+==-=>Axiom Republic<=-==
+    -Accessed File-
+┎───────────────────────────────────────────────────────────────────┒
+┃ Original Minecro-Republic README (available)                      ┃
+┃───────────────────────────────────────────────────────────────────┨
+┃Micro Republic                                                     ┃
+┃Greetings to all, this is a special repository designed for        ┃
+┃Minecraft Resources. As the ███ are closing in on our Minecraft    ┃
+┃launchers: ██ and ███, we now face the fact that only little       ┃
+┃Minecraft launchers can be found and used functionally.            ┃
+┃                                                                   ┃
+┃Now, this repository, also linking to its site:                    ┃
+┃https://minecrowaver.github.io/MinecroRepublic/ is displaying      ┃
+┃the only functional and usable Minecraft launchers and resources,  ┃
+┃also providing links to download. Now, visit the site and get      ┃
+┃all sorts of resources and a good MC experience! There is also     ┃
+┃a private repository with all texts and links unblocked! Contact   ┃
+┃me at: minecrowaver@outlook.com to get permission! =D              ┃
+┃                                                                   ┃
+┃Features                                                           ┃
+┃Minecraft resources and links                                      ┃
+┃Solutions to possible problems while setting programs up           ┃
+┃Continuous updates                                                 ┃
+┃Cross platform programs                                            ┃
+┃Acknowledgements                                                   ┃
+┃All links are found by myself, so I hope that there are no forms   ┃
+┃of privacy and authority violation to anybody                      ┃
+┃For all loss of asset or property or anything, I am not responsible┃
+┃If you are using the links and programs that I shared, well, ENJOY!┃
+┃Support                                                            ┃
+┃For support, email minecrowaver@outlook.com or join the discord    ┃
+┃channel (Send the request and username to me).                     ┃
+┖───────────────────────────────────────────────────────────────────┚
+╭─────────────────────╮
+│ MINECRAFT TUTORIALS │
+╰─────────────────────╯
+2B2T (2BUILDERS2TOOLS):
+2b2t is a VERY OLD(started on 2011) Minecraft server with no rules (IP to join: 2b2t.org)
+How to get strong:
+There is only 1 possible way to start your journey in the server: BUY STUFF ON 2B2T WEB STORES
+(I personally recommend XianYu|咸鱼, cause thats how I did it. Specific shop: 
+FOR RESOURCES: https://www.goofish.com/item?spm=a21ybx.search.searchFeedList.2.45236531sLGTii&id=828801613678&categoryId=126856259
+FOR PRIORITY QUEUE: https://www.goofish.com/item?spm=a21ybx.search.searchFeedList.1.1de734e0WyCFiu&id=1002200795059&categoryId=202036001)
+
+ItsMrEric's 2b2t resources:
+ItsMrEric's 2b2t 1.21.4 PVP.SURVIVAL Pack - Mods.7z
+Baidu Net Disk link: https://pan.baidu.com/s/1ddoYnbQon2wsqA267cEu3A
+Password: jhhf
+
+Recommended hacks:
+XRay
+Elytra Bounce
+Crystal Aura
+Auto City
+And much more......
+
+╭──────────────────╮
+│ Useful Tutorials │
+╰──────────────────╯
+1. Open Jar files without Administrator's Username and Password. You need JAVA installed first.
+Instructions:
+Copy the path of your Jar file.
+Go into Terminal or some kind of command inputer
+      ┌───────────bash───────────┐
+Inter:│java -jar YOURFILEPATH.jar│
+      └──────────────────────────┘
+Incase you are having problems understanding, here is a example:
+┌─────────────bash─────────────┐
+│java -jar /downloads/myjar.jar│
+└──────────────────────────────┘
+
+You will see your application running up!
+With this trick, there are so much more Minecraft Launchers and tool you can use!
+Good Luck!
+
+Evolve Resources:
+Evolve game official website: https://pmotschmann.github.io/Evolve/
+
+Hacks for Evolve:
+Unlimited resources/Creative mode hack: https://www.reddit.com/r/EvolveIdle/comments/jr9mz2/evolve_creative_mode_save_editor_toolhack/
+Code Minified: javascript:!function(){let e=$($("nav")[0].firstChild),t=!1,n=$("#mainColumn > div > div > section"),l='<div id="hackContent" style="padding: 20px;">\n<span>Evolve Creative Mode\n[made by SimplyNo]</span>\n<table>\n    <tr>\n        <th style="font-weight: normal;" class="has-text-warning">\n            Type\n        </th>\n        <th style="font-weight: normal;" class="has-text-warning">\n            Item\n        </th>\n        <th style="font-weight: normal;" class="has-text-warning">\n            Property\n        </th>\n        <th style="font-weight: normal;" class="has-text-warning">\n            New Value\n        </th>\n        <th style="font-weight: normal;" class="has-text-success">\n            Current Value\n        </th>\n    </tr>\n</table>\n<button class="button" onClick="newSet()">New Set</button>\n<button class="button" onClick="save()" style="float: right;">Save Changes</button>\n\n</div>';e.append('<li id="hackTab" class><a onClick="openHackTab()">simply\'as hack</a></li>'),window.getSession=(()=>JSON.parse(LZString.decompressFromBase64(exportGame()))),window.getKeys=((e,t)=>{let n,l,d=window.getSession();return"*"==e?(l=d,n=Object.keys(l)):"fill"==e?(l=t,n=Object.keys(l)):(l=d[e],n=Object.keys(l)),"object"!=typeof l?0:(n.sort((e,t)=>e.toLowerCase()>t.toLowerCase()?1:t.toLowerCase()>e.toLowerCase()?-1:0),n.length?`<option>${n.join("</option><option>")}</option>`:-1)}),window.handleType=(e=>{let t=$(e.parentElement.parentElement),n=e.value,l=window.getKeys(n);for(;t[0].childElementCount>1;)$(t[0].lastChild).remove();if(-1==l)$(t[0]).append('<td style="border:0;">n/a</td>'),$(t[0]).append('<td style="border:0;">n/a</td>'),$(t[0]).append('<td style="border:0;">n/a</td>'),$(t[0]).append('<td style="border:0;">n/a</td>');else if(l){let e=t.append(`<td style="border:0;"><select onchange="handleItem(this)">${l}</select></td>`);window.handleItem(e[0].children[1].firstChild)}else $(t[0]).append('<td style="border:0;">n/a</td>'),$(t[0]).append('<td style="border:0;">n/a</td>'),$(t[0]).append('<td style="border:0;"><input placeholder="New Value"></input></td>'),$(t[0]).append(`<td style="border:0;">${window.getSession()[n]}</td>`)}),window.handleItem=(e=>{let t=$(e.parentElement.parentElement),n=t[0].children[0].children[0].value,l=e.value,d=window.getKeys("fill",window.getSession()[n][l]);for(;t[0].childElementCount>2;)$(t[0].lastChild).remove();if(-1==d)$(t[0]).append('<td style="border:0;">n/a</td>'),$(t[0]).append('<td style="border:0;">n/a</td>'),$(t[0]).append('<td style="border:0;">n/a</td>');else if(d){let e=t.append(`<td style="border:0;"><select onchange="handleProp(this)">${d}</select></td>`);window.handleProp(e[0].children[2].firstChild)}else $(t[0]).append('<td style="border:0;">n/a</td>'),$(t[0]).append('<td style="border:0;"><input placeholder="New Value"></input></td>'),$(t[0]).append(`<td style="border:0;">${window.getSession()[n][l]}</td>`)}),window.handleProp=(e=>{let t=$(e.parentElement.parentElement),n=t[0].children[0].children[0].value,l=t[0].children[1].children[0].value,d=e.value,a=window.getKeys("fill",window.getSession()[n][l][d]);for(;t[0].childElementCount>3;)$(t[0].lastChild).remove();-1==a?($(t[0]).append('<td style="border:0;">n/a</td>'),$(t[0]).append('<td style="border:0;">n/a</td>')):a?alert("oh"):($(t[0]).append('<td style="border:0;"><input placeholder="New Value"></input></td>'),$(t[0]).append(`<td style="border:0;">${window.getSession()[n][l][d]}</td>`))}),window.newSet=(()=>{let e=$("#hackContent > table > tbody").append(`    <tr>\n    <td style="border: 0;">\n        <select onchange="handleType(this)">\n            ${getKeys("*")}\n        </select>\n    </td>\n</tr>`);window.handleType(e[0].lastChild.children[0].children[0])}),window.save=(()=>{let e=window.getSession();Array.from($("#hackContent > table > tbody")[0].children).forEach((t,n)=>{if(n){let t=$(`#hackContent > table > tbody > tr:nth-child(${n+1}) > td:nth-child(1) > select`)[0]?$(`#hackContent > table > tbody > tr:nth-child(${n+1}) > td:nth-child(1) > select`)[0].value:null,l=$(`#hackContent > table > tbody > tr:nth-child(${n+1}) > td:nth-child(2) > select`)[0]?$(`#hackContent > table > tbody > tr:nth-child(${n+1}) > td:nth-child(2) > select`)[0].value:null,d=$(`#hackContent > table > tbody > tr:nth-child(${n+1}) > td:nth-child(3) > select`)[0]?$(`#hackContent > table > tbody > tr:nth-child(${n+1}) > td:nth-child(3) > select`)[0].value:null,a=$(`#hackContent > table > tbody > tr:nth-child(${n+1}) > td:nth-child(4) > input`)[0]?$(`#hackContent > table > tbody > tr:nth-child(${n+1}) > td:nth-child(4) > input`)[0].value:null;a&&(d?e[t][l][d]=a:l?e[t][l]=a:t&&(e[t]=a))}});let t=LZString.compressToBase64(JSON.stringify(e));importGame(t)}),window.openHackTab=(()=>{t||(t=!0,n[0].childNodes.forEach(e=>{"hackContent"!==e.id&&e.setAttribute("style","display: none")}),$(n[0]).append(l.replace("%KEYS_GLOBAL%",getKeys("*"))),e[0].childNodes.forEach(e=>{"hackTab"!==e.id?(e.setAttribute("class",""),e.setAttribute("onClick","closeHackTab()")):e.setAttribute("class","is-active")}),window.newSet())}),window.closeHackTab=(()=>{t&&(t=!1,e[0].childNodes.forEach(e=>{"hackTab"!==e.id?e.setAttribute("onClick","closeHackTab()"):e.setAttribute("class","")}),$("#hackContent").remove())}),window.openHackTab()}();
+Speed hack: https://www.reddit.com/r/EvolveIdle/comments/1gyknw3/userscript_game_speed_multiplier/
+            ┌──────────────────────────────────┐ ┌────────────────────┐
+How to copy:│command(control) shift right_arrow│+│command(control) "C"│
+            └──────────────────────────────────┘ └────────────────────┘
+Have fun with the hack =D
+
+╭─────────────────╮
+│ BLOXD TUTORIALS │
+╰─────────────────╯
+Bloxd.io is a multiplayer voxel sandbox game free to play online, originally inspired by Minecraft. 
+The game features a variety of different sub-games, better known as gamemodes, each having a unique twist on the games core.
+
+You can enter Bloxd.io in school via using the vpn from Opera GX and visiting crazygames
+
+Nothing so special here though......
+
+╭─────╮
+│ VPN │
+╰─────╯
+VPN is blocked, but however, we can still get access to those SUPER TASTY IP CHANGERS. 
+
+First usable VPN discovered by [UNKNOWN]: https://www.hotspotshield.com/zh/mianfei-vpn/
+Second usable VPN discovered by ItsMrEric: https://protonvpn.com/download?srsltid=AfmBOopP8aLr1DvU2RTyRMtEhFm5oGm3mHbrGZerT4UC0PH0wQQ19u7i
+Still, there's many free VPN softwares sitting around on the internet.
+
+╭──────────────────╮
+│ CURRENT PROBLEMS │
+╰──────────────────╯
+Java updating is requiring Administrator's Username and Password
+
+Please help solve these problems! If you find any solutions, email your solution to Minecrowaver@outlook.com! Thank you!
