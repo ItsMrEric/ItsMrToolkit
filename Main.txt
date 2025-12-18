@@ -1,5 +1,8 @@
-==-=>Axiom Republic<=-==
-    -Accessed File-
+╭────────────────────╮
+│  +-ItsMrToolkit-+  │
+│ =-Main tutorials-= │
+╰────────────────────╯
+
 ┎───────────────────────────────────────────────────────────────────┒
 ┃ Original Minecro-Republic README (available)                      ┃
 ┃───────────────────────────────────────────────────────────────────┨
@@ -31,6 +34,7 @@
 ┃For support, email minecrowaver@outlook.com or join the discord    ┃
 ┃channel (Send the request and username to me).                     ┃
 ┖───────────────────────────────────────────────────────────────────┚
+
 ╭─────────────────────╮
 │ MINECRAFT TUTORIALS │
 ╰─────────────────────╯
@@ -54,10 +58,17 @@ Crystal Aura
 Auto City
 And much more......
 
+How to play Minecraft at school. There are three main routes to play Minecraft. 
+1. Via .jar launchers like HTML and TLauncher. Specific tutorials below.
+2. Via apps like TL Legacy launcher(kinda dead).
+3. Via browser. Eaglercraft is currently at version 1.21 (most convenient).
+
 ╭──────────────────╮
 │ Useful Tutorials │
 ╰──────────────────╯
-1. Open Jar files without Administrator's Username and Password. You need JAVA installed first.
+App blocked by IT? Go inside the blocked app(need to open first) and change the name of the executable file under the MacOS folder, and how you should be able to open the app via executing the executable file.
+
+To open .jar files without Administrator's Username and Password. You need JAVA installed first.
 Instructions:
 Copy the path of your Jar file.
 Go into Terminal or some kind of command inputer
@@ -91,7 +102,7 @@ Have fun with the hack =D
 Bloxd.io is a multiplayer voxel sandbox game free to play online, originally inspired by Minecraft. 
 The game features a variety of different sub-games, better known as gamemodes, each having a unique twist on the games core.
 
-You can enter Bloxd.io in school via using the vpn from Opera GX and visiting crazygames
+You can enter Bloxd.io in school via using the VPN from Opera GX and visiting crazygames
 
 Nothing so special here though......
 
@@ -104,9 +115,21 @@ First usable VPN discovered by [UNKNOWN]: https://www.hotspotshield.com/zh/mianf
 Second usable VPN discovered by ItsMrEric: https://protonvpn.com/download?srsltid=AfmBOopP8aLr1DvU2RTyRMtEhFm5oGm3mHbrGZerT4UC0PH0wQQ19u7i
 Still, there's many free VPN softwares sitting around on the internet.
 
+╭───────╮
+│ Files │
+╰───────╯
+How to make password-protected folders?
+Go to disk utility, add a blank image, and then set the password to what you prefer.
+Customize the size of the image, and you are ready to go. 
+
+How to customize the appearance of anything(apps, folders, everything......) in your MacOS.
+First, right-click the file and click show info, drag image files into the big icon of the file.
+
+
 ╭──────────────────╮
 │ CURRENT PROBLEMS │
 ╰──────────────────╯
 Java updating is requiring Administrator's Username and Password
 
 Please help solve these problems! If you find any solutions, email your solution to Minecrowaver@outlook.com! Thank you!
+
