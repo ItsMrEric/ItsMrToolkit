@@ -1,1641 +1,1681 @@
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <div id="page-main">
     <!DOCTYPE html>
-<html lang="en">
+    <html lang="en">
 
-<head>
-    <meta charset="UTF-8">
-    <title>ItsMrToolkit</title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&display=swap" rel="stylesheet">
-
-    <style>
-        :root {
-            --bg: #050814;
-            --panel: #0b1024cc;
-            --accent: #00cbd2;
-            --accent2: #a855ff;
-            --text: #e6f1ff;
-            --glow: 0 0 12px var(--accent), 0 0 32px var(--accent);
-        }
-
-        * {
-            box-sizing: border-box
-        }
-
-
-        body {
-            margin: 0;
-            padding: 70px 20px;
-            font-family: Orbitron, sans-serif;
-            color: var(--text);
-            background:
-                radial-gradient(circle at 10% 10%, #0c1b4d 0%, transparent 40%),
-                radial-gradient(circle at 90% 20%, #2a0c4d 0%, transparent 45%),
-                linear-gradient(180deg, #02040a, var(--bg));
-            overflow-x: hidden;
-        }
-
-        /* HUD frame */
-        body::before,
-        body::after {
-            content: "";
-            position: fixed;
-            inset: 20px;
-            pointer-events: none;
-            border: 1px solid rgba(0, 246, 255, .18);
-            box-shadow: inset 0 0 30px rgba(0, 246, 255, .08);
-        }
-
-        body::after {
-            inset: 42px;
-            border-color: rgba(168, 85, 255, .14);
-        }
-
-        h1 {
-            text-align: center;
-            font-size: 4rem;
-            letter-spacing: 6px;
-            margin-bottom: 70px;
-            color: #00f6ff;
-            text-shadow: 0 0 12px #004a4d, 0 0 30px #005356;
-            animation: pulse 2s ease-in-out infinite alternate;
-        }
-
-        h3 {
-            text-align: center;
-            font-size: 2rem;
-            letter-spacing: 6px;
-            margin-bottom: 50px;
-            color: #00f6ff;
-            text-shadow: 0 0 12px #00f6ff, 0 0 30px #005356;
-            animation: pulse 2s ease-in-out infinite alternate;
-        }
-
-        @keyframes pulse {
-            from {
-                filter: drop-shadow(0 0 8px var(--accent))
+    <head>
+        <meta charset="UTF-8">
+        <title>ItsMrToolkit</title>
+        <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&display=swap" rel="stylesheet">
+        <style>
+            :root {
+                --bg: #050814;
+                --panel: #0b1024cc;
+                --accent: #00cbd2;
+                --accent2: #a855ff;
+                --text: #e6f1ff;
+                --glow: 0 0 12px var(--accent), 0 0 32px var(--accent);
             }
 
-            to {
-                filter: drop-shadow(0 0 22px var(--accent2))
-            }
-        }
-
-        section {
-            max-width: 950px;
-            margin: 0 auto 55px;
-            padding: 34px 44px;
-            background: linear-gradient(160deg, #0a1230, var(--panel));
-            border-radius: 18px;
-            border: 1px solid rgba(0, 246, 255, .28);
-            box-shadow: 0 0 40px rgba(0, 246, 255, .15);
-            position: relative;
-        }
-
-
-
-        /* corner accents */
-        section::before,
-        section::after {
-            content: "";
-            position: absolute;
-            width: 60px;
-            height: 60px;
-            border: 2px solid var(--accent);
-            opacity: .65;
-        }
-
-        section::before {
-            top: -6px;
-            left: -6px;
-            border-right: none;
-            border-bottom: none
-        }
-
-        section::after {
-            bottom: -6px;
-            right: -6px;
-            border-left: none;
-            border-top: none
-        }
-
-        h2 {
-            font-size: 2.4rem;
-            margin-bottom: 30px;
-            color: #a855ff;
-            text-shadow: 0 0 10px #a855ff, 0 0 24px #1d003c;
-        }
-
-        ul {
-            list-style: none;
-            padding: 0;
-            margin: 0
-        }
-
-        li {
-            margin-bottom: 18px
-        }
-
-        button {
-            width: 100%;
-            padding: 16px 22px;
-            font-size: 1.1rem;
-            font-family: Orbitron;
-            color: var(--text);
-            background: linear-gradient(145deg, #101a3d, #070b1d);
-            border: 1px solid rgba(0, 246, 255, .4);
-            border-radius: 12px;
-            cursor: pointer;
-            text-align: left;
-            box-shadow: 0 0 14px rgba(0, 246, 255, .18);
-            transition: .25s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        button::after {
-            content: "";
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(120deg, transparent, rgba(0, 246, 255, .28), transparent);
-            transform: translateX(-130%);
-        }
-
-        button:hover::after {
-            transform: translateX(130%);
-            transition: .6s
-        }
-
-        button:hover {
-            color: #fff;
-            box-shadow: 0 0 32px rgba(0, 246, 255, .6);
-            transform: translateX(6px) scale(1.04);
-        }
-
-        button:active {
-            box-shadow: 0 0 32px rgba(0, 246, 255, .6);
-            transform: translateX(6px) scale(0.98)
-        }
-
-        .meta {
-            margin: 10px 12px 28px;
-            font-size: .9rem;
-            line-height: 1.6;
-            color: #cfefff;
-            opacity: .88;
-        }
-
-        .email-glitch {
-            display: inline-block;
-            font-weight: 700;
-            color: #00ffff;
-            position: relative;
-            cursor: pointer;
-
-            text-shadow:
-                0 0 8px #00ffff,
-                0 0 18px rgba(0, 255, 255, .6);
-
-            transition:
-                color 0.35s ease,
-                text-shadow 0.35s ease,
-                transform 0.25s ease,
-                filter 0.35s ease;
-        }
-
-        .scan-layer {
-            position: absolute;
-            inset: 0;
-            overflow: hidden;
-            /* ← CLIPS SCAN ONLY */
-            pointer-events: none;
-        }
-
-        .scan-layer::after {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: -40%;
-            width: 40%;
-            height: 100%;
-
-            background: linear-gradient(120deg,
-                    transparent,
-                    rgba(255, 255, 255, .45),
-                    transparent);
-
-            opacity: 0;
-            mix-blend-mode: screen;
-        }
-
-        .email-glitch.scan-active .scan-layer::after {
-            animation: scan 3.2s ease-in-out infinite;
-        }
-
-        /* scanning light */
-        .email-glitch::after {
-            content: "";
-            position: absolute;
-            inset: 2px;
-            pointer-events: none;
-            background: linear-gradient(120deg,
-                    transparent 30%,
-                    rgba(255, 255, 255, .35) 50%,
-                    transparent 70%);
-            transform: translateX(-200%);
-            opacity: 0;
-            mix-blend-mode: screen;
-            transition: opacity 0.4s ease;
-        }
-
-        /* scanning light ONLY when active */
-        .email-glitch.scan-active::after {
-            animation: scan 3.2s ease-in-out infinite;
-        }
-
-
-
-        @keyframes scan {
-            0% {
-                transform: translateX(-40%);
-                opacity: 0;
-            }
-
-            15% {
-                opacity: .85;
-            }
-
-            85% {
-                opacity: .85;
-            }
-
-            100% {
-                transform: translateX(40%);
-                opacity: 0;
-            }
-        }
-
-
-
-
-
-        .email-glitch:hover {
-            color: #ffffff;
-            text-shadow:
-                0 0 12px #00ffff,
-                0 0 30px #00ffff,
-                0 0 60px #a855ff;
-
-            transform: translateY(-2px);
-        }
-
-
-
-
-        @media(prefers-reduced-motion:reduce) {
             * {
-                animation: none !important;
-                transition: none !important
-            }
-        }
-
-        /* =========================
-   SIDE DECORATIONS
-========================= */
-        .side-decor {
-            position: fixed;
-            top: 0;
-            bottom: 0;
-            width: 120px;
-            pointer-events: none;
-            z-index: 0;
-        }
-
-        .side-decor.left {
-            left: 0;
-        }
-
-        .side-decor.right {
-            right: 0;
-        }
-
-        /* shared shape style */
-        .side-decor::before,
-        .side-decor::after {
-            content: "";
-            position: absolute;
-            opacity: 0.25;
-            filter: drop-shadow(0 0 12px var(--accent));
-        }
-
-        /* circle */
-        .side-decor::before {
-            width: 72px;
-            height: 72px;
-            border-radius: 50%;
-            border: 2px solid var(--accent);
-            top: 20%;
-        }
-
-        /* square */
-        .side-decor::after {
-            width: 60px;
-            height: 60px;
-            border: 2px solid var(--accent2);
-            bottom: 25%;
-            transform: rotate(45deg);
-        }
-
-        /* offsets per side */
-        .side-decor.left::before {
-            left: 30px;
-        }
-
-        .side-decor.left::after {
-            left: 10px;
-        }
-
-        .side-decor.right::before {
-            right: 30px;
-        }
-
-        .side-decor.right::after {
-            right: 10px;
-        }
-
-        /* subtle floating animation */
-        @keyframes float {
-            from {
-                transform: translateY(0) rotate(45deg);
+                box-sizing: border-box
             }
 
-            to {
-                transform: translateY(-20px) rotate(45deg);
+            body {
+                margin: 0;
+                padding: 70px 20px;
+                font-family: Orbitron, sans-serif;
+                color: var(--text);
+                background:
+                    radial-gradient(circle at 10% 10%, #0c1b4d 0%, transparent 40%),
+                    radial-gradient(circle at 90% 20%, #2a0c4d 0%, transparent 45%),
+                    linear-gradient(180deg, #02040a, var(--bg));
+                overflow-x: hidden;
             }
-        }
 
-        .side-decor::after {
-            animation: float 6s ease-in-out infinite alternate;
-        }
+            /* HUD frame */
+            body::before,
+            body::after {
+                content: "";
+                position: fixed;
+                inset: 20px;
+                pointer-events: none;
+                border: 1px solid rgba(0, 246, 255, .18);
+                box-shadow: inset 0 0 30px rgba(0, 246, 255, .08);
+            }
 
-        .side-decor::before {
-            animation: float 8s ease-in-out infinite alternate-reverse;
-        }
+            body::after {
+                inset: 42px;
+                border-color: rgba(168, 85, 255, .14);
+            }
 
-        /* =========================
-   BOXED MAIN TITLE
+            h1 {
+                text-align: center;
+                font-size: 4rem;
+                letter-spacing: 6px;
+                margin-bottom: 70px;
+                color: #00f6ff;
+                text-shadow: 0 0 12px #004a4d, 0 0 30px #005356;
+                animation: pulse 2s ease-in-out infinite alternate;
+            }
+
+            h3 {
+                text-align: center;
+                font-size: 2rem;
+                letter-spacing: 6px;
+                margin-bottom: 50px;
+                color: #00f6ff;
+                text-shadow: 0 0 12px #00f6ff, 0 0 30px #005356;
+                animation: pulse 2s ease-in-out infinite alternate;
+            }
+
+            @keyframes pulse {
+                from {
+                    filter: drop-shadow(0 0 8px var(--accent))
+                }
+
+                to {
+                    filter: drop-shadow(0 0 22px var(--accent2))
+                }
+            }
+
+            section {
+                max-width: 950px;
+                margin: 0 auto 55px;
+                padding: 34px 44px;
+                background: linear-gradient(160deg, #0a1230, var(--panel));
+                border-radius: 18px;
+                border: 1px solid rgba(0, 246, 255, .28);
+                box-shadow: 0 0 40px rgba(0, 246, 255, .15);
+                position: relative;
+            }
+
+            /* corner accents */
+            section::before,
+            section::after {
+                content: "";
+                position: absolute;
+                width: 60px;
+                height: 60px;
+                border: 2px solid var(--accent);
+                opacity: .65;
+            }
+
+            section::before {
+                top: -6px;
+                left: -6px;
+                border-right: none;
+                border-bottom: none
+            }
+
+            section::after {
+                bottom: -6px;
+                right: -6px;
+                border-left: none;
+                border-top: none
+            }
+
+            h2 {
+                font-size: 2.4rem;
+                margin-bottom: 30px;
+                color: #a855ff;
+                text-shadow: 0 0 10px #a855ff, 0 0 24px #1d003c;
+            }
+
+            ul {
+                list-style: none;
+                padding: 0;
+                margin: 0
+            }
+
+            li {
+                margin-bottom: 18px
+            }
+
+            button {
+                width: 100%;
+                padding: 16px 22px;
+                font-size: 1.1rem;
+                font-family: Orbitron;
+                color: var(--text);
+                background: linear-gradient(145deg, #101a3d, #070b1d);
+                border: 1px solid rgba(0, 246, 255, .4);
+                border-radius: 12px;
+                cursor: pointer;
+                text-align: left;
+                box-shadow: 0 0 14px rgba(0, 246, 255, .18);
+                transition: .25s ease;
+                position: relative;
+                overflow: hidden;
+            }
+
+            button::after {
+                content: "";
+                position: absolute;
+                inset: 0;
+                background: linear-gradient(120deg, transparent, rgba(0, 246, 255, .28), transparent);
+                transform: translateX(-130%);
+            }
+
+            button:hover::after {
+                transform: translateX(130%);
+                transition: .6s
+            }
+
+            button:hover {
+                color: #fff;
+                box-shadow: 0 0 32px rgba(0, 246, 255, .6);
+                transform: translateX(6px) scale(1.04);
+            }
+
+            button:active {
+                box-shadow: 0 0 32px rgba(0, 246, 255, .6);
+                transform: translateX(6px) scale(0.98)
+            }
+
+            .meta {
+                margin: 10px 12px 28px;
+                font-size: .9rem;
+                line-height: 1.6;
+                color: #cfefff;
+                opacity: .88;
+            }
+
+            .email-glitch {
+                display: inline-block;
+                font-weight: 700;
+                color: #00ffff;
+                position: relative;
+                cursor: pointer;
+                text-shadow:
+                    0 0 8px #00ffff,
+                    0 0 18px rgba(0, 255, 255, .6);
+                transition:
+                    color 0.35s ease,
+                    text-shadow 0.35s ease,
+                    transform 0.25s ease,
+                    filter 0.35s ease;
+            }
+
+            .scan-layer {
+                position: absolute;
+                inset: 0;
+                overflow: hidden;
+                /* ← CLIPS SCAN ONLY */
+                pointer-events: none;
+            }
+
+            .scan-layer::after {
+                content: "";
+                position: absolute;
+                top: 0;
+                left: -40%;
+                width: 40%;
+                height: 100%;
+                background: linear-gradient(120deg,
+                        transparent,
+                        rgba(255, 255, 255, .45),
+                        transparent);
+                opacity: 0;
+                mix-blend-mode: screen;
+            }
+
+            .email-glitch.scan-active .scan-layer::after {
+                animation: scan 3.2s ease-in-out infinite;
+            }
+
+            /* scanning light */
+            .email-glitch::after {
+                content: "";
+                position: absolute;
+                inset: 2px;
+                pointer-events: none;
+                background: linear-gradient(120deg,
+                        transparent 30%,
+                        rgba(255, 255, 255, .35) 50%,
+                        transparent 70%);
+                transform: translateX(-200%);
+                opacity: 0;
+                mix-blend-mode: screen;
+                transition: opacity 0.4s ease;
+            }
+
+            /* scanning light ONLY when active */
+            .email-glitch.scan-active::after {
+                animation: scan 3.2s ease-in-out infinite;
+            }
+
+            @keyframes scan {
+                0% {
+                    transform: translateX(-40%);
+                    opacity: 0;
+                }
+
+                15% {
+                    opacity: .85;
+                }
+
+                85% {
+                    opacity: .85;
+                }
+
+                100% {
+                    transform: translateX(40%);
+                    opacity: 0;
+                }
+            }
+
+            .email-glitch:hover {
+                color: #ffffff;
+                text-shadow:
+                    0 0 12px #00ffff,
+                    0 0 30px #00ffff,
+                    0 0 60px #a855ff;
+                transform: translateY(-2px);
+            }
+
+            @media(prefers-reduced-motion:reduce) {
+                * {
+                    animation: none !important;
+                    transition: none !important
+                }
+            }
+
+            /* =========================
+SIDE DECORATIONS
 ========================= */
-        .title-box {
-            position: relative;
-            max-width: 760px;
-            margin: 0 auto 80px;
-            padding: 28px 50px;
+            .side-decor {
+                position: fixed;
+                top: 0;
+                bottom: 0;
+                width: 120px;
+                pointer-events: none;
+                z-index: 0;
+            }
 
-            background: linear-gradient(160deg,
-                    rgba(10, 18, 48, 0.85),
-                    rgba(11, 16, 36, 0.92));
+            .side-decor.left {
+                left: 0;
+            }
 
-            border-radius: 20px;
-            border: 1px solid rgba(0, 246, 255, 0.35);
+            .side-decor.right {
+                right: 0;
+            }
 
-            box-shadow:
-                0 0 40px rgba(0, 246, 255, 0.18),
-                inset 0 0 24px rgba(0, 246, 255, 0.08);
+            /* shared shape style */
+            .side-decor::before,
+            .side-decor::after {
+                content: "";
+                position: absolute;
+                opacity: 0.25;
+                filter: drop-shadow(0 0 12px var(--accent));
+            }
 
-            text-align: center;
-        }
+            /* circle */
+            .side-decor::before {
+                width: 72px;
+                height: 72px;
+                border-radius: 50%;
+                border: 2px solid var(--accent);
+                top: 20%;
+            }
 
-        /* corner brackets */
-        .title-box::before,
-        .title-box::after {
-            content: "";
-            position: absolute;
-            width: 70px;
-            height: 70px;
-            border: 2px solid var(--accent);
-            opacity: 0.75;
-        }
+            /* square */
+            .side-decor::after {
+                width: 60px;
+                height: 60px;
+                border: 2px solid var(--accent2);
+                bottom: 25%;
+                transform: rotate(45deg);
+            }
 
-        .title-box::before {
-            top: -8px;
-            left: -8px;
-            border-right: none;
-            border-bottom: none;
-        }
+            /* offsets per side */
+            .side-decor.left::before {
+                left: 30px;
+            }
 
-        .title-box::after {
-            bottom: -8px;
-            right: -8px;
-            border-left: none;
-            border-top: none;
-        }
+            .side-decor.left::after {
+                left: 10px;
+            }
 
-        /* optional faint scan line */
-        .title-box::marker {
-            content: "";
-        }
+            .side-decor.right::before {
+                right: 30px;
+            }
 
-        /* tighten the title itself */
-        .title-box h1 {
-            margin: 0;
-            font-size: 3.8rem;
-            letter-spacing: 6px;
-        }
+            .side-decor.right::after {
+                right: 10px;
+            }
 
-        /* =========================
-   ANIMATED HUD TITLE
+            /* subtle floating animation */
+            @keyframes float {
+                from {
+                    transform: translateY(0) rotate(45deg);
+                }
+
+                to {
+                    transform: translateY(-20px) rotate(45deg);
+                }
+            }
+
+            .side-decor::after {
+                animation: float 6s ease-in-out infinite alternate;
+            }
+
+            .side-decor::before {
+                animation: float 8s ease-in-out infinite alternate-reverse;
+            }
+
+            /* =========================
+BOXED MAIN TITLE
 ========================= */
-
-        .title-box {
-            position: relative;
-            max-width: 820px;
-            margin: 0 auto 90px;
-            padding: 34px 56px;
-
-            background:
-                linear-gradient(160deg, rgba(10, 18, 48, .88), rgba(11, 16, 36, .95));
-
-            border-radius: 22px;
-            border: 1px solid rgba(0, 246, 255, .38);
-
-            box-shadow:
-                0 0 55px rgba(0, 246, 255, .22),
-                inset 0 0 30px rgba(0, 246, 255, .10);
-
-            text-align: center;
-            overflow: hidden;
-        }
-
-        /* animated outer glow pulse */
-        .title-box {
-            animation: titleGlow 4s ease-in-out infinite alternate;
-        }
-
-        @keyframes titleGlow {
-            from {
+            .title-box {
+                position: relative;
+                max-width: 760px;
+                margin: 0 auto 80px;
+                padding: 28px 50px;
+                background: linear-gradient(160deg,
+                        rgba(10, 18, 48, 0.85),
+                        rgba(11, 16, 36, 0.92));
+                border-radius: 20px;
+                border: 1px solid rgba(0, 246, 255, 0.35);
                 box-shadow:
-                    0 0 40px rgba(0, 246, 255, .18),
-                    inset 0 0 22px rgba(0, 246, 255, .08);
+                    0 0 40px rgba(0, 246, 255, 0.18),
+                    inset 0 0 24px rgba(0, 246, 255, 0.08);
+                text-align: center;
             }
 
-            to {
+            /* corner brackets */
+            .title-box::before,
+            .title-box::after {
+                content: "";
+                position: absolute;
+                width: 70px;
+                height: 70px;
+                border: 2px solid var(--accent);
+                opacity: 0.75;
+            }
+
+            .title-box::before {
+                top: -8px;
+                left: -8px;
+                border-right: none;
+                border-bottom: none;
+            }
+
+            .title-box::after {
+                bottom: -8px;
+                right: -8px;
+                border-left: none;
+                border-top: none;
+            }
+
+            /* optional faint scan line */
+            .title-box::marker {
+                content: "";
+            }
+
+            /* tighten the title itself */
+            .title-box h1 {
+                margin: 0;
+                font-size: 3.8rem;
+                letter-spacing: 6px;
+            }
+
+            /* =========================
+ANIMATED HUD TITLE
+========================= */
+            .title-box {
+                position: relative;
+                max-width: 820px;
+                margin: 0 auto 90px;
+                padding: 34px 56px;
+                background:
+                    linear-gradient(160deg, rgba(10, 18, 48, .88), rgba(11, 16, 36, .95));
+                border-radius: 22px;
+                border: 1px solid rgba(0, 246, 255, .38);
                 box-shadow:
-                    0 0 80px rgba(168, 85, 255, .35),
-                    inset 0 0 30px rgba(168, 85, 255, .12);
-            }
-        }
-
-        /* corner brackets (animated) */
-        .title-box::before,
-        .title-box::after {
-            content: "";
-            position: absolute;
-            width: 90px;
-            height: 90px;
-            border: 2px solid var(--accent);
-            opacity: .8;
-        }
-
-        .title-box::before {
-            top: -10px;
-            left: -10px;
-            border-right: none;
-            border-bottom: none;
-            animation: cornerPulse 3s ease-in-out infinite;
-        }
-
-        .title-box::after {
-            bottom: -10px;
-            right: -10px;
-            border-left: none;
-            border-top: none;
-            animation: cornerPulse 3s ease-in-out infinite reverse;
-        }
-
-        @keyframes cornerPulse {
-            0% {
-                opacity: .4;
+                    0 0 55px rgba(0, 246, 255, .22),
+                    inset 0 0 30px rgba(0, 246, 255, .10);
+                text-align: center;
+                overflow: hidden;
             }
 
-            50% {
-                opacity: 1;
+            /* animated outer glow pulse */
+            .title-box {
+                animation: titleGlow 4s ease-in-out infinite alternate;
             }
 
-            100% {
-                opacity: .4;
-            }
-        }
+            @keyframes titleGlow {
+                from {
+                    box-shadow:
+                        0 0 40px rgba(0, 246, 255, .18),
+                        inset 0 0 22px rgba(0, 246, 255, .08);
+                }
 
-        /* title text enhancement */
-        .title-box h1 {
-            margin: 0;
-            font-size: 3.9rem;
-            letter-spacing: 7px;
-            color: #00f6ff;
-
-            text-shadow:
-                0 0 14px #00575a,
-                0 0 40px #002b2d,
-                0 0 80px rgba(168, 85, 255, .6);
-
-            animation: titleTextPulse 2.5s ease-in-out infinite alternate;
-        }
-
-        @keyframes titleTextPulse {
-            from {
-                filter: drop-shadow(0 0 10px var(--accent));
+                to {
+                    box-shadow:
+                        0 0 80px rgba(168, 85, 255, .35),
+                        inset 0 0 30px rgba(168, 85, 255, .12);
+                }
             }
 
-            to {
-                filter: drop-shadow(0 0 24px var(--accent2));
+            /* corner brackets (animated) */
+            .title-box::before,
+            .title-box::after {
+                content: "";
+                position: absolute;
+                width: 90px;
+                height: 90px;
+                border: 2px solid var(--accent);
+                opacity: .8;
             }
-        }
 
-        /* horizontal scanning light */
-        /* =========================
-   ENERGY BORDER EFFECT
+            .title-box::before {
+                top: -10px;
+                left: -10px;
+                border-right: none;
+                border-bottom: none;
+                animation: cornerPulse 3s ease-in-out infinite;
+            }
+
+            .title-box::after {
+                bottom: -10px;
+                right: -10px;
+                border-left: none;
+                border-top: none;
+                animation: cornerPulse 3s ease-in-out infinite reverse;
+            }
+
+            @keyframes cornerPulse {
+                0% {
+                    opacity: .4;
+                }
+
+                50% {
+                    opacity: 1;
+                }
+
+                100% {
+                    opacity: .4;
+                }
+            }
+
+            /* title text enhancement */
+            .title-box h1 {
+                margin: 0;
+                font-size: 3.9rem;
+                letter-spacing: 7px;
+                color: #00f6ff;
+                text-shadow:
+                    0 0 14px #00575a,
+                    0 0 40px #002b2d,
+                    0 0 80px rgba(168, 85, 255, .6);
+                animation: titleTextPulse 2.5s ease-in-out infinite alternate;
+            }
+
+            @keyframes titleTextPulse {
+                from {
+                    filter: drop-shadow(0 0 10px var(--accent));
+                }
+
+                to {
+                    filter: drop-shadow(0 0 24px var(--accent2));
+                }
+            }
+
+            html,
+            body {
+                overscroll-behavior: none;
+            }
+
+            /* horizontal scanning light */
+            /* =========================
+ENERGY BORDER EFFECT
 ========================= */
-        .title-energy {
-            position: absolute;
-            inset: 0;
-            border-radius: 22px;
-            pointer-events: none;
-
-            background:
-                linear-gradient(90deg, transparent, rgba(0, 246, 255, .35), transparent),
-                linear-gradient(180deg, transparent, rgba(168, 85, 255, .25), transparent);
-
-            mask:
-                linear-gradient(#fff 0 0) content-box,
-                linear-gradient(#fff 0 0);
-
-            -webkit-mask-composite: xor;
-            mask-composite: exclude;
-
-            padding: 2px;
-            animation: energyFlow 6s linear infinite;
-        }
-
-        @keyframes energyFlow {
-            from {
-                background-position: 0% 0%, 0% 0%;
+            .title-energy {
+                position: absolute;
+                inset: 0;
+                border-radius: 22px;
+                pointer-events: none;
+                background:
+                    linear-gradient(90deg, transparent, rgba(0, 246, 255, .35), transparent),
+                    linear-gradient(180deg, transparent, rgba(168, 85, 255, .25), transparent);
+                mask:
+                    linear-gradient(#fff 0 0) content-box,
+                    linear-gradient(#fff 0 0);
+                -webkit-mask-composite: xor;
+                mask-composite: exclude;
+                padding: 2px;
+                animation: energyFlow 6s linear infinite;
             }
 
-            to {
-                background-position: 200% 0%, 0% 200%;
-            }
-        }
+            @keyframes energyFlow {
+                from {
+                    background-position: 0% 0%, 0% 0%;
+                }
 
-        /* =========================
-   FLOATING PARTICLES
+                to {
+                    background-position: 200% 0%, 0% 200%;
+                }
+            }
+
+            /* =========================
+FLOATING PARTICLES
 ========================= */
-
-
-        /* rotating side decorations */
-        .title-decor {
-            position: absolute;
-            top: 50%;
-            width: 46px;
-            height: 46px;
-            border: 2px solid var(--accent2);
-            transform: translateY(-50%) rotate(45deg);
-            opacity: .5;
-        }
-
-        .title-decor.left {
-            left: 26px;
-            animation: spinSlow 10s linear infinite;
-        }
-
-        .title-decor.right {
-            right: 26px;
-            animation: spinSlow 12s linear infinite reverse;
-        }
-
-        @keyframes spinSlow {
-            from {
+            /* rotating side decorations */
+            .title-decor {
+                position: absolute;
+                top: 50%;
+                width: 46px;
+                height: 46px;
+                border: 2px solid var(--accent2);
                 transform: translateY(-50%) rotate(45deg);
+                opacity: .5;
             }
 
-            to {
-                transform: translateY(-50%) rotate(405deg);
+            .title-decor.left {
+                left: 26px;
+                animation: spinSlow 10s linear infinite;
             }
-        }
 
-        body {
-            cursor: url("data:image/png;iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAMAAACdt4HsAAAABGdBTUEAALGPC/xhBQAAAQ5QTFRF6+vr6urq6Ojo7+/v6Ojo7+/v8vLy5OTk8vLy4+Pj9fX1/f399/f39vb2zMzM29vb+fn5+fn539/f0tLS2NjY4ODg/f39////////////1dXV6urq2NjY3Nzc7u7u3d3d////////////////////AAAA+fn5/v7+6Ojo9vb24uLi/Pz87+/v8fHx5eXl8/Pz3Nzc+/v739/f4ODg6enp3d3d/f392dnZ+Pj44+Pj9fX17u7u7Ozs5ubm29vb1dXV1tbW09PTzc3Nzs7O6+vr1NTU19fX0tLS2NjY9/f30NDQ0dHR+vr62tra3t7ez8/P4eHh8vLy5+fn5OTk6urq8PDw9PT07e3tzMzM////jfWFqAAAACZ0Uk5TP5/ff2/fT5+vP39/H9/vP0+vb+/f399fzz+fb2+fDw9/r99PHwCLHpKhAAACD0lEQVRYw+3WV5eaQAAFYNM3Pdn0tu6q6NpFBVEpFlSkilJm/v8fCc09IBiY+Mp9v99cDuVQwC5MIQdy4AT4UbkM+A7hXfkC4Bt0U7qt/C9QhkHQZoQuoXQUkGaEgFsYSuYZIaACI8k4I3wb7yCs1WqIM8JAGdZIskmizYg8iV/JJo7LzeilpMyIAK+buCxXqRPh3zMiQMWtU9s6Dk9zfkb0ZfpYpbbb+mQix4SzM6LAB69udbsJwpkZJ6/z2/rEsrq63q4mCc6MNOCVXzfNFgUhpSesSAHedLt6u222plPb6gAAhJiR9kW6cuutqW3TdQKABCINeG56x9O8Tco9kECkfhOfuXWaNyxS3rIgTqQCT5z1vGEMdQewRiBGpAI3NM8bw+H9Pe4ApnAUAIdnBLBHbn2/Z1ouYK8fhH5WoOCcvmeYzoFyAWP2IGQFsMde/TCmPWDPIQNPmU7nMB43dhMPOMxRgRu/vhsMfWC3QQSwF+NGYzcY9FXdB1QJEXjp11WCCQBFRAOwL4N+XyWIHjsNgLWGBlz7dVYZH4HVArAIQFElej1WUUYj/ghI2gQBwP54dUFYK0wAiJqNArxnndOF9WzGrVbzzUYSRW25pBEA7LNTX884bjWfbyRJ1LTlYgF4BOC3f3y47oTPDhSj6xfB08xnBrCfXLzuCqWsQPFTdH2Qd7/yX90cyIEcOJe/QNzggxoFfuEAAAAASUVORK5CYII="), 32, 32, auto;
-        }
-    </style>
-</head>
-
-<body>
-
-    <div class="side-decor left"></div>
-    <div class="side-decor right"></div>
-
-    <div class="title-box">
-        <div class="title-decor left"></div>
-        <div class="title-decor right"></div>
-
-        <h1>ItsMrToolkit</h1>
-
-        <div class="title-energy"></div>
-
-    </div>
-
-
-    <h3>
-        Want more games? Email
-    </h3>
-    <h3>
-        <span id="email" class="email-glitch">
-            <span class="scan-layer"></span>
-        </span>
-
-    </h3>
-    <script>
-        const emailText = "ItsMrEric@outlook.com";
-        const emailEl = document.getElementById("email");
-
-        let i = 0;
-        let finishedTyping = false;
-
-        emailEl.textContent = "";
-        emailEl.classList.remove("scan-active");
-
-        function typeEmail() {
-            if (i < emailText.length) {
-                emailEl.textContent += emailText.charAt(i);
-                i++;
-                setTimeout(typeEmail, 80);
-            } else {
-                finishedTyping = true;
-
-                // enable scanning light AFTER typing
-                emailEl.classList.add("scan-active");
+            .title-decor.right {
+                right: 26px;
+                animation: spinSlow 12s linear infinite reverse;
             }
-        }
 
-        typeEmail();
-    </script>
-    <section>
-        <h2>Signup / Login</h2>
-        <div class="meta">If you are a admin or you just simply wants to do this</div>
-        <ul>
-            <li>
-                <button onclick="showPage('page-login')"><b>-> <span style="color:#a1adff">Login</span>
-                        <- </b> Enter your username and password</button>
-            </li>
-            <li>
-                <button onclick="showPage('page-signup')"><b>-> <span style="color:#a1ffa6">signUp</span>
-                        <- </b> Create an account with a username and password</button>
-            </li>
-        </ul>
-    </section>
-    <section>
-        <h2>Games - Click to go to download website</h2>
-        <ul>
-            <li>
-                <button onclick="openWebsite('https://pan.baidu.com/share/init?surl=-yvALWP0fxrY9cb7VtWdSA')"><b><span style="color:#d390ff">Hollow Knight</span></b>.dmg → Baidu Net Disk</button>
-                <div class="meta">APP • ~ 1.2 GB • Mac | BaiduNetDisk code: <b style="color:#00ffff">uvur</b><br>Forge your own path in Hollow Knight! An epic action adventure through a vast ruined kingdom of insects and heroes.</div>
-            </li>
-            <li>
-                <button onclick="openWebsite('https://pan.baidu.com/share/init?surl=SR31dDykQWzAnXAmynN0IA')"><b><span style="color:#d390ff">Hollow Knight Silksong</span></b>.dmg → Baidu Net Disk</button>
-                <div class="meta">APP • ~ 2.2 GB • Mac | BaiduNetDisk code: <b style="color:#00ffff">s2rm</b><br>Discover a vast, haunted kingdom in Hollow Knight: Silksong! The sequel to the award winning action-adventure. Explore, fight and survive as you ascend to the peak of a land ruled by silk and song.</div>
-            </li>
-            <li>
-                <button onclick="openWebsite('https://pan.baidu.com/share/init?surl=sXEnvn-4ErKY4iTI8ib4FA')"><b><span style="color:#f5ff85">TABS</span></b>.dmg → Baidu Net Disk</button>
-                <div class="meta">APP • ~ 1.6 GB • Mac | BaiduNetDisk code: <b style="color:#00ffff">y84k</b><br>Totally Accurate Battle Simulator (TABS) is a physics-based strategy video game developed and published by Landfall Games.</div>
-            </li>
-            <li>
-                <button onclick="openWebsite('https://pan.baidu.com/share/init?surl=_myweFLqwKHt6ni2ZKPLmw')"><b><span style="color:#7a85ff">BlueStacks</span></b>.dmg → Baidu Net Disk</button>
-                <div class="meta">APP • ~ 1.6 GB • Mac | BaiduNetDisk code: <b style="color:#00ffff">4761</b><br>BlueStacks is a free Android emulator that allows users to run Android apps and games on a Windows PC or Mac</div>
-            </li>
-            <button onclick="openWebsite('https://pan.baidu.com/share/init?surl=Sc15rxbJaNM4HCJa5r0TzA')"><b><span style="color:#00ffff">The Necromancer's Tale</span></b>.dmg → Baidu Net Disk</button>
-            <div class="meta">APP • ~ 2.4 GB • Mac | BaiduNetDisk code: <b style="color:#00ffff">y24n</b><br>The Necromancer's Tale is a narrative-driven top-down RPG where you play the role of a minor noble in the 18th Century, drawn into the Dark Necromantic Arts as you seek knowledge and revenge. Great power awaits... along with the weird, the morbid, and a gradual descent into madness.</div>
-            </li>
-            <li>
-                <button onclick="openWebsite('https://pan.baidu.com/share/init?surl=p-HQjoMBNBQdR48SX6xLHQ')"><b><span style="color:#7cc2ff">Reus 2</span></b>.dmg → Baidu Net Disk</button>
-                <div class="meta">APP • ~ 1000 MB • Mac | BaiduNetDisk code: <b style="color:#00ffff">agsg</b><br>Shape humanity with the power of the gods in Reus 2. Choose your giants, combine natural elements, and manipulate fate to guide the path of civilization.</div>
-            </li>
-            <li>
-            <li>
-                <button onclick="openWebsite('https://keystoneacademy-my.sharepoint.com/:u:/g/personal/xingrui_chen_student_keystoneacademy_cn/EQK8pbGUdAtKl_j0_n9pT94BAq6P96etyLcDsevgYTt30Q?e=c4RAr8')"><b><span style="color:#ff7070">Ravenfield</span></b>.zip → OneDrive</button>
-                <div class="meta">APP • ~ 800 MB • Mac | ONEDRIVE PASSWORD: <b style="color:#00ffff">zvbtOcr4ln</b></div>
-            </li>
-            <li>
-                <button onclick="openWebsite('https://keystoneacademy-my.sharepoint.com/:u:/g/personal/xingrui_chen_student_keystoneacademy_cn/EZ3S8iWruztBqOHtBRVTqtMBHaGpysOSBJksuFewUnRrdw?e=Ncd5sh')"><b><span style="color:#7eff84">Minecraft</span></b>.zip → OneDrive</button>
-                <div class="meta">APP • ~ 10 MB • Mac | ONEDRIVE PASSWORD: <b style="color:#00ffff">z2PQdOFX9l</b></div>
-            </li>
-            <li>
-                <button onclick="openWebsite('https://keystoneacademy-my.sharepoint.com/:u:/g/personal/xingrui_chen_student_keystoneacademy_cn/EXxhta9FRBZHk8ew0ehexroBLEtryfmABXMstELB5jhUHg?e=ra3nRe')"><b><span style="color:#692dff">Polytrack</span></b>.zip → OneDrive</button>
-                <div class="meta">APP • ~ 112 MB • Mac | ONEDRIVE PASSWORD: <b style="color:#00ffff">NgclzMwqbA</b></div>
-            </li>
-        </ul>
-    </section>
+            @keyframes spinSlow {
+                from {
+                    transform: translateY(-50%) rotate(45deg);
+                }
 
-    <section>
-        <h2>Tools</h2>
-        <ul>
-            <li><button onclick="openWebsite('about:blank')">ProtonVPN.zip</button>
-                <div class="meta">APP • ~ 74 MB • Mac</div>
-            </li>
-            <li><button onclick="openWebsite('about:blank')">Mousecape.zip</button>
-                <div class="meta">APP • ~ 2 MB • Mac</div>
-            </li>
-            <li><button onclick="openWebsite('about:blank')">Blockbench.zip</button>
-                <div class="meta">APP • ~ 2 MB • Mac</div>
-            </li>
-            <li><button onclick="openWebsite('about:blank')">Mac Informer.zip</button>
-                <div class="meta">APP • ~ 2 MB • Mac</div>
-            </li>
-        </ul>
-    </section>
+                to {
+                    transform: translateY(-50%) rotate(405deg);
+                }
+            }
 
-    <section>
-        <h2>Tutorials</h2>
-        <ul>
-            <li><button onclick="openWebsite('about:blank')">Telemetry Feed</button></li>
-            <li><button onclick="openWebsite('about:blank')">Sensor Analysis</button></li>
-            <li><button onclick="openWebsite('about:blank')">Predictive Modeling</button></li>
-        </ul>
-    </section>
+            body {
+                cursor: url("data:image/png;iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAMAAACdt4HsAAAABGdBTUEAALGPC/xhBQAAAQ5QTFRF6+vr6urq6Ojo7+/v6Ojo7+/v8vLy5OTk8vLy4+Pj9fX1/f399/f39vb2zMzM29vb+fn5+fn539/f0tLS2NjY4ODg/f39////////////1dXV6urq2NjY3Nzc7u7u3d3d////////////////////AAAA+fn5/v7+6Ojo9vb24uLi/Pz87+/v8fHx5eXl8/Pz3Nzc+/v739/f4ODg6enp3d3d/f392dnZ+Pj44+Pj9fX17u7u7Ozs5ubm29vb1dXV1tbW09PTzc3Nzs7O6+vr1NTU19fX0tLS2NjY9/f30NDQ0dHR+vr62tra3t7ez8/P4eHh8vLy5+fn5OTk6urq8PDw9PT07e3tzMzM////jfWFqAAAACZ0Uk5TP5/ff2/fT5+vP39/H9/vP0+vb+/f399fzz+fb2+fDw9/r99PHwCLHpKhAAACD0lEQVRYw+3WV5eaQAAFYNM3Pdn0tu6q6NpFBVEpFlSkilJm/v8fCc09IBiY+Mp9v99cDuVQwC5MIQdy4AT4UbkM+A7hXfkC4Bt0U7qt/C9QhkHQZoQuoXQUkGaEgFsYSuYZIaACI8k4I3wb7yCs1WqIM8JAGdZIskmizYg8iV/JJo7LzeilpMyIAK+buCxXqRPh3zMiQMWtU9s6Dk9zfkb0ZfpYpbbb+mQix4SzM6LAB69udbsJwpkZJ6/z2/rEsrq63q4mCc6MNOCVXzfNFgUhpSesSAHedLt6u222plPb6gAAhJiR9kW6cuutqW3TdQKABCINeG56x9O8Tco9kECkfhOfuXWaNyxS3rIgTqQCT5z1vGEMdQewRiBGpAI3NM8bw+H9Pe4ApnAUAIdnBLBHbn2/Z1ouYK8fhH5WoOCcvmeYzoFyAWP2IGQFsMde/TCmPWDPIQNPmU7nMB43dhMPOMxRgRu/vhsMfWC3QQSwF+NGYzcY9FXdB1QJEXjp11WCCQBFRAOwL4N+XyWIHjsNgLWGBlz7dVYZH4HVArAIQFElej1WUUYj/ghI2gQBwP54dUFYK0wAiJqNArxnndOF9WzGrVbzzUYSRW25pBEA7LNTX884bjWfbyRJ1LTlYgF4BOC3f3y47oTPDhSj6xfB08xnBrCfXLzuCqWsQPFTdH2Qd7/yX90cyIEcOJe/QNzggxoFfuEAAAAASUVORK5CYII="), 32, 32, auto;
+            }
+        </style>
+    </head>
 
-    <section>
-        <h2>Recommended Websites</h2>
-        <ul>
-            <li><button onclick="openWebsite('about:blank')">Access Permissions</button></li>
-            <li><button onclick="openWebsite('about:blank')">Interface Customization</button></li>
-            <li><button onclick="openWebsite('about:blank')">System Overrides</button></li>
-        </ul>
-    </section>
-    <section>
-        <h2>Updates | Notes</h2>
-        <div class="meta">Last updated on 12/16/2025</div>
-    </section>
+    <body>
+        <div class="side-decor left"></div>
+        <div class="side-decor right"></div>
+        <div class="title-box">
+            <div class="title-decor left"></div>
+            <div class="title-decor right"></div>
+            <h1>ItsMrToolkit</h1>
+            <div class="title-energy"></div>
+        </div>
+        <h3> Want more games? Email </h3>
+        <h3>
+            <span id="email" class="email-glitch">
+                <span class="scan-layer"></span>
+            </span>
+        </h3>
+        <script>
+            const emailText = "ItsMrEric@outlook.com";
+            const emailEl = document.getElementById("email");
+            let i = 0;
+            let finishedTyping = false;
+            emailEl.textContent = "";
+            emailEl.classList.remove("scan-active");
 
-    <script>
-        function openWebsite(url) {
-            window.open(url, '_blank')
-        }
-    </script>
+            function typeEmail() {
+                if (i < emailText.length) {
+                    emailEl.textContent += emailText.charAt(i);
+                    i++;
+                    setTimeout(typeEmail, 80);
+                } else {
+                    finishedTyping = true;
+                    // enable scanning light AFTER typing
+                    emailEl.classList.add("scan-active");
+                }
+            }
+            typeEmail();
+        </script>
+        <section>
+            <h2>Signup / Login</h2>
+            <div class="meta">If you are a admin or you just simply wants to do this</div>
+            <ul>
+                <li>
+                    <button onclick="showPage('page-login')">
+                        <b>-> <span style="color:#a1adff">Login</span>
+                            <- </b> Enter your username and password </button>
+                </li>
+                <li>
+                    <button onclick="showPage('page-signup')">
+                        <b>-> <span style="color:#a1ffa6">signUp</span>
+                            <- </b> Create an account with a username and password </button>
+                </li>
+            </ul>
+        </section>
+        <section>
+            <h2>Games - Click to go to download website</h2>
+            <ul>
+                <li>
+                    <button onclick="openWebsite('https://pan.baidu.com/share/init?surl=-yvALWP0fxrY9cb7VtWdSA')">
+                        <b>
+                            <span style="color:#d390ff">Hollow Knight</span>
+                        </b>.dmg → Baidu Net Disk </button>
+                    <div class="meta">APP • ~ 1.2 GB • Mac | BaiduNetDisk code: <b style="color:#00ffff">uvur</b>
+                        <br>Forge your own path in Hollow Knight! An epic action adventure through a vast ruined kingdom of insects and heroes.
+                    </div>
+                </li>
+                <li>
+                    <button onclick="openWebsite('https://pan.baidu.com/share/init?surl=SR31dDykQWzAnXAmynN0IA')">
+                        <b>
+                            <span style="color:#d390ff">Hollow Knight Silksong</span>
+                        </b>.dmg → Baidu Net Disk </button>
+                    <div class="meta">APP • ~ 2.2 GB • Mac | BaiduNetDisk code: <b style="color:#00ffff">s2rm</b>
+                        <br>Discover a vast, haunted kingdom in Hollow Knight: Silksong! The sequel to the award winning action-adventure. Explore, fight and survive as you ascend to the peak of a land ruled by silk and song.
+                    </div>
+                </li>
+                <li>
+                    <button onclick="openWebsite('https://pan.baidu.com/share/init?surl=sXEnvn-4ErKY4iTI8ib4FA')">
+                        <b>
+                            <span style="color:#f5ff85">TABS</span>
+                        </b>.dmg → Baidu Net Disk </button>
+                    <div class="meta">APP • ~ 1.6 GB • Mac | BaiduNetDisk code: <b style="color:#00ffff">y84k</b>
+                        <br>Totally Accurate Battle Simulator (TABS) is a physics-based strategy video game developed and published by Landfall Games.
+                    </div>
+                </li>
+                <li>
+                    <button onclick="openWebsite('https://pan.baidu.com/share/init?surl=_myweFLqwKHt6ni2ZKPLmw')">
+                        <b>
+                            <span style="color:#7a85ff">BlueStacks</span>
+                        </b>.dmg → Baidu Net Disk </button>
+                    <div class="meta">APP • ~ 1.6 GB • Mac | BaiduNetDisk code: <b style="color:#00ffff">4761</b>
+                        <br>BlueStacks is a free Android emulator that allows users to run Android apps and games on a Windows PC or Mac
+                    </div>
+                </li>
+                <button onclick="openWebsite('https://pan.baidu.com/share/init?surl=Sc15rxbJaNM4HCJa5r0TzA')">
+                    <b>
+                        <span style="color:#00ffff">The Necromancer's Tale</span>
+                    </b>.dmg → Baidu Net Disk </button>
+                <div class="meta">APP • ~ 2.4 GB • Mac | BaiduNetDisk code: <b style="color:#00ffff">y24n</b>
+                    <br>The Necromancer's Tale is a narrative-driven top-down RPG where you play the role of a minor noble in the 18th Century, drawn into the Dark Necromantic Arts as you seek knowledge and revenge. Great power awaits... along with the weird, the morbid, and a gradual descent into madness.
+                </div>
+                </li>
+                <li>
+                    <button onclick="openWebsite('https://pan.baidu.com/share/init?surl=p-HQjoMBNBQdR48SX6xLHQ')">
+                        <b>
+                            <span style="color:#7cc2ff">Reus 2</span>
+                        </b>.dmg → Baidu Net Disk </button>
+                    <div class="meta">APP • ~ 1000 MB • Mac | BaiduNetDisk code: <b style="color:#00ffff">agsg</b>
+                        <br>Shape humanity with the power of the gods in Reus 2. Choose your giants, combine natural elements, and manipulate fate to guide the path of civilization.
+                    </div>
+                </li>
+                <li>
+                <li>
+                    <button onclick="openWebsite('https://keystoneacademy-my.sharepoint.com/:u:/g/personal/xingrui_chen_student_keystoneacademy_cn/EQK8pbGUdAtKl_j0_n9pT94BAq6P96etyLcDsevgYTt30Q?e=c4RAr8')">
+                        <b>
+                            <span style="color:#ff7070">Ravenfield</span>
+                        </b>.zip → OneDrive </button>
+                    <div class="meta">APP • ~ 800 MB • Mac | ONEDRIVE PASSWORD: <b style="color:#00ffff">zvbtOcr4ln</b>
+                        <br>Fight upon the Ravenfield together with your Blue allies! Take down those pesky Reds using helicopters, tanks, guns, and active ragdoll physics!
+                    </div>
+                </li>
+                <li>
+                    <button onclick="openWebsite('https://keystoneacademy-my.sharepoint.com/:u:/g/personal/xingrui_chen_student_keystoneacademy_cn/EZ3S8iWruztBqOHtBRVTqtMBHaGpysOSBJksuFewUnRrdw?e=Ncd5sh')">
+                        <b>
+                            <span style="color:#7eff84">Minecraft</span>
+                        </b>.zip → OneDrive </button>
+                    <div class="meta">APP • ~ 10 MB • Mac | ONEDRIVE PASSWORD: <b style="color:#00ffff">z2PQdOFX9l</b>
+                        <br>a hugely popular sandbox video game where players explore a blocky, procedurally-generated 3D world, discover and extract raw materials, craft tools and items, and build structures or earthworks
+                    </div>
+                </li>
+                <li>
+                    <button onclick="openWebsite('https://keystoneacademy-my.sharepoint.com/:u:/g/personal/xingrui_chen_student_keystoneacademy_cn/EXxhta9FRBZHk8ew0ehexroBLEtryfmABXMstELB5jhUHg?e=ra3nRe')">
+                        <b>
+                            <span style="color:#692dff">Polytrack</span>
+                        </b>.zip → OneDrive </button>
+                    <div class="meta">APP • ~ 112 MB • Mac | ONEDRIVE PASSWORD: <b style="color:#00ffff">NgclzMwqbA</b>
+                        <br>A low-poly racing game with loops, jumps and high speeds, where every millisecond counts.
+                    </div>
+                </li>
+            </ul>
+        </section>
+        <section>
+            <h2>Tools</h2>
+            <ul>
+                <li>
+                    <button onclick="openWebsite('https://keystoneacademy-my.sharepoint.com/:u:/g/personal/xingrui_chen_student_keystoneacademy_cn/EfjT2ES2To5EsSx7ILNTarkBIeqft7iFdmrk6D5bmuxE2A?e=nQsFHH')">
+                        <b>
+                            <span style="color:#6cd8ff">ProtonVPN</span>
+                        </b>.zip → OneDrive </button>
+                    <div class="meta">APP • ~ 74 MB • Mac | ONEDRIVE PASSWORD: <b style="color:#00ffff">bD0n05Ti6w</b>
+                        <br>High speed free vpn that I prefer to use.
+                    </div>
+                </li>
+                <li>
+                    <button onclick="openWebsite('https://keystoneacademy-my.sharepoint.com/:u:/g/personal/xingrui_chen_student_keystoneacademy_cn/EZL11LHB889PuehVV2R3PqgB_imJnASMuiuYeqzLM3j5ig?e=rOyNiV')">
+                        <b>
+                            <span style="color:#fbff7a">Mousecape</span>
+                        </b>.zip → OneDrive </button>
+                    <div class="meta">APP • ~ 2 MB • Mac | ONEDRIVE PASSWORD: <b style="color:#00ffff">gv5fIaoU7e</b>
+                        <br>Change the appearance of your curser with Mousecape! Draw your own or download png files online. Personalize your cursor with a simple installation.
+                    </div>
+                </li>
+                <li>
+                    <button onclick="openWebsite('https://keystoneacademy-my.sharepoint.com/:u:/g/personal/xingrui_chen_student_keystoneacademy_cn/EWh-RgHOz7VEhiqKOCGCj6EBBpmdY-g1hjoyMKkEpmjz1Q?e=fE3M19')">
+                        <b>
+                            <span style="color:#70deff">Blockbench</span>
+                        </b>.zip → OneDrive </button>
+                    <div class="meta">APP • ~ 2 MB • Mac | ONEDRIVE PASSWORD: <b style="color:#00ffff">wo7fJl7fhu</b>
+                        <br>Blockbench puts all the tools at your disposal to make the creation process of low-poly models as easy as possible.
+                    </div>
+                </li>
+                <li>
+                    <button onclick="openWebsite('https://keystoneacademy-my.sharepoint.com/:u:/g/personal/xingrui_chen_student_keystoneacademy_cn/Ef4tuU991-JOjJV5kBdJPNYB_PbZPQko_SqwngR1Csa8CQ?e=FAVRDb')">
+                        <b>
+                            <span style="color:#6476ff">Mac Informer</span>
+                        </b>.zip → OneDrive </button>
+                    <div class="meta">APP • ~ 2 MB • Mac | ONEDRIVE PASSWORD: <b style="color:#00ffff">gwmw9qlBWk</b>
+                        <br>Find all kinds of apps, tools, and games all within this free software!
+                    </div>
+                </li>
+            </ul>
+        </section>
+        <section>
+            <h2>Tutorials</h2>
+            <ul>
+                <li>
+                    <button onclick="openWebsite('https://pan.baidu.com/s/1XhKJ0kZ163cGC3GjvInaGg')">
+                        <b style="color:#00ffff">Main</b>.txt → BaiduNetDisk </button>
+                </li>
+                <div class="meta">Text • ~ 12 KB | BaiduNetDisk code: <b style="color:#00ffff">9hva</b>
+                    <br>Main tutorial of ItsMrToolkit, with the following tutorial classes: <br>1. Original Minecro-Republic README <br>2. MINECRAFT TUTORIALS <br>3. Useful Tutorials <br>4. BLOXD TUTORIALS <br>5. VPN <br>6. Files <br>7. CURRENT PROBLEMS
+                </div>
+            </ul>
+        </section>
+        <section>
+            <h2>Recommended Websites</h2>
+            <ul>
+                <li>
+                    <button onclick="openWebsite('https://www.bloxd.io')">
+                        <b style="color:#87ff8b">Bloxd</b>.io - Click to play </button>
+                </li>
+                <div class='meta'>Web Game <br>Join bloxd with a collection of online games like bedwars, skywars. Build, pvp, and explore in block worlds. <br>
+                    <b>Sadly, Bloxd can not be played in school. Or thats what I currently know. But you can access it via Opera GX with VPN. Get more in the main tutorial document.</b>
+                </div>
+                <li>
+                    <button onclick="openWebsite('https://www.kour.io')">
+                        <b style="color:#ffcb87">Kour</b>.io - Click to play </button>
+                </li>
+                <div class='meta'>Kour.io is an action-packed multiplayer IO first-person shooter that delivers intense gunfights across a variety of maps and game modes. <b>you can access Kour.io through VPN (I personally prefer Proton VPN) and get a kinda-laggy experience</b>
+                </div>
+                <li>
+                    <button onclick="openWebsite('https://poki.com')">
+                        <b style="color:#879dff">Poki</b>.com - Click to play </button>
+                </li>
+                <div class='meta'>Poki is the ultimate playground with over 1500 free online games. We offer instant play to all our games without downloads, login, popups or other distractions.</div>
+            </ul>
+        </section>
+        <section>
+            <h2>Updates | Notes</h2>
+            <div class="meta">Last updated on 12/18/2025 <br>
+                <b>Copyright © 2025 <span style="color:#90ff94">ItsMrEric</span> - Eric Chen </b>
+            </div>
+        </section>
+        <script>
+            function openWebsite(url) {
+                window.open(url, '_blank')
+            }
+        </script>
+    </body>
 
-</body>
-
-</html>
+    </html>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+    const SUPABASE_URL = "https://wphkxzhdxwjkqbmascoa.supabase.co";
+    const SUPABASE_KEY = "sb_publishable_01AKv7BpIjY6dg1JZzXG-Q_Z6rKIUPv";
+    const client = window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+    );
 
+    function usernameToEmail(username) {
+        return `${username.toLowerCase()}@internal.local`;
+    }
+
+    async function login(username, password) {
+        const email = usernameToEmail(username);
+
+        const {
+            error
+        } = await supabase.auth.signInWithPassword({
+            email,
+            password
+        });
+
+        if (error) {
+            alert("Invalid username or password");
+            return;
+        }
+
+        alert("Logged in!");
+        window.location.href = "app.html";
+    }
+
+    async function signup(username, password) {
+        username = username.trim();
+        password = password.trim();
+
+        const email = usernameToEmail(username);
+
+        const {
+            data,
+            error
+        } = await client.auth.signUp({
+            email,
+            password
+        });
+
+        if (error) {
+            alert(error.message);
+            return;
+        }
+
+        const {
+            error: profileError
+        } = await client
+            .from("profiles")
+            .insert({
+                id: data.user.id,
+                username
+            });
+
+        if (profileError) {
+            alert("Username already taken");
+            return;
+        }
+
+        alert("Account created!");
+        showPage("page-login");
+        window.signup = signup;
+        window.login = login;
+    }
+</script>
 <div id="page-login" hidden>
     <!DOCTYPE html>
-<html lang="en">
+    <html lang="en">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-<head>
-    <meta charset="UTF-8">
-    <title>ItsMrToolkit — Login</title>
 
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&display=swap" rel="stylesheet">
+    <head>
+        <meta charset="UTF-8">
+        <title>ItsMrToolkit — Login</title>
+        <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&display=swap" rel="stylesheet">
+        <style>
+            :root {
+                --bg: #050814;
+                --panel: #0b1024cc;
+                --accent: #00cbd2;
+                --accent2: #a855ff;
+                --text: #e6f1ff;
+            }
 
-    <style>
-        :root {
-            --bg: #050814;
-            --panel: #0b1024cc;
-            --accent: #00cbd2;
-            --accent2: #a855ff;
-            --text: #e6f1ff;
-        }
+            * {
+                box-sizing: border-box;
+            }
 
-        * {
-            box-sizing: border-box;
-        }
+            html,
+            body {
+                height: auto;
+                min-height: 100%;
+            }
 
-        html,
-        body {
-            height: auto;
-            min-height: 100%;
-        }
+            body {
+                margin: 0;
+                padding: 90px 20px 140px;
+                min-height: 100vh;
+                position: relative;
+                font-family: Orbitron, sans-serif;
+                color: var(--text);
+                background:
+                    radial-gradient(circle at 10% 10%, #0c1b4d 0%, transparent 40%),
+                    radial-gradient(circle at 90% 20%, #2a0c4d 0%, transparent 45%),
+                    linear-gradient(180deg, #02040a, var(--bg));
+                overflow-x: hidden;
+            }
 
-        body {
-            margin: 0;
-            padding: 90px 20px 140px;
-            min-height: 100vh;
-            position: relative;
+            /* HUD FRAME (SCROLLS WITH CONTENT) */
+            body::before,
+            body::after {
+                content: "";
+                position: absolute;
+                inset: 20px;
+                pointer-events: none;
+                border: 1px solid rgba(0, 246, 255, .18);
+                box-shadow: inset 0 0 30px rgba(0, 246, 255, .08);
+                z-index: 0;
+            }
 
-            font-family: Orbitron, sans-serif;
-            color: var(--text);
+            body::after {
+                inset: 42px;
+                border-color: rgba(168, 85, 255, .14);
+            }
 
-            background:
-                radial-gradient(circle at 10% 10%, #0c1b4d 0%, transparent 40%),
-                radial-gradient(circle at 90% 20%, #2a0c4d 0%, transparent 45%),
-                linear-gradient(180deg, #02040a, var(--bg));
-
-            overflow-x: hidden;
-        }
-
-        /* HUD FRAME (SCROLLS WITH CONTENT) */
-        body::before,
-        body::after {
-            content: "";
-            position: absolute;
-            inset: 20px;
-            pointer-events: none;
-            border: 1px solid rgba(0, 246, 255, .18);
-            box-shadow: inset 0 0 30px rgba(0, 246, 255, .08);
-            z-index: 0;
-        }
-
-        body::after {
-            inset: 42px;
-            border-color: rgba(168, 85, 255, .14);
-        }
-
-        /* ======================
-   TITLE BOX
+            /* ======================
+TITLE BOX
 ====================== */
-        .title-box {
-            max-width: 760px;
-            margin: 0 auto 80px;
-            padding: 30px 50px;
-            text-align: center;
+            .title-box {
+                max-width: 760px;
+                margin: 0 auto 80px;
+                padding: 30px 50px;
+                text-align: center;
+                background: linear-gradient(160deg, rgba(10, 18, 48, .9), rgba(11, 16, 36, .95));
+                border-radius: 22px;
+                border: 1px solid rgba(0, 246, 255, .35);
+                box-shadow:
+                    0 0 55px rgba(0, 246, 255, .22),
+                    inset 0 0 26px rgba(0, 246, 255, .08);
+                position: relative;
+                overflow: hidden;
+                z-index: 1;
+            }
 
-            background: linear-gradient(160deg, rgba(10, 18, 48, .9), rgba(11, 16, 36, .95));
-            border-radius: 22px;
-            border: 1px solid rgba(0, 246, 255, .35);
+            .title-box::before,
+            .title-box::after {
+                content: "";
+                position: absolute;
+                width: 90px;
+                height: 90px;
+                border: 2px solid var(--accent);
+                opacity: .75;
+            }
 
-            box-shadow:
-                0 0 55px rgba(0, 246, 255, .22),
-                inset 0 0 26px rgba(0, 246, 255, .08);
+            .title-box::before {
+                top: -10px;
+                left: -10px;
+                border-right: none;
+                border-bottom: none;
+            }
 
-            position: relative;
-            overflow: hidden;
-            z-index: 1;
-        }
+            .title-box::after {
+                bottom: -10px;
+                right: -10px;
+                border-left: none;
+                border-top: none;
+            }
 
-        .title-box::before,
-        .title-box::after {
-            content: "";
-            position: absolute;
-            width: 90px;
-            height: 90px;
-            border: 2px solid var(--accent);
-            opacity: .75;
-        }
+            .title-box h1 {
+                margin: 0;
+                font-size: 3.6rem;
+                letter-spacing: 6px;
+                color: #00f6ff;
+                text-shadow:
+                    0 0 14px #00f6ff,
+                    0 0 40px rgba(168, 85, 255, .6);
+            }
 
-        .title-box::before {
-            top: -10px;
-            left: -10px;
-            border-right: none;
-            border-bottom: none;
-        }
-
-        .title-box::after {
-            bottom: -10px;
-            right: -10px;
-            border-left: none;
-            border-top: none;
-        }
-
-        .title-box h1 {
-            margin: 0;
-            font-size: 3.6rem;
-            letter-spacing: 6px;
-            color: #00f6ff;
-            text-shadow:
-                0 0 14px #00f6ff,
-                0 0 40px rgba(168, 85, 255, .6);
-        }
-
-        /* ======================
-   LOGIN PANEL
+            /* ======================
+LOGIN PANEL
 ====================== */
-        .login-panel {
-            max-width: 520px;
-            margin: 0 auto;
-            padding: 44px 46px;
-
-            background: linear-gradient(160deg, #0a1230, var(--panel));
-            border-radius: 18px;
-            border: 1px solid rgba(0, 246, 255, .28);
-
-            box-shadow: 0 0 40px rgba(0, 246, 255, .18);
-
-            position: relative;
-            z-index: 2;
-
-            animation: panelPulse 5s ease-in-out infinite alternate;
-        }
-
-        @keyframes panelPulse {
-            from {
+            .login-panel {
+                max-width: 520px;
+                margin: 0 auto;
+                padding: 44px 46px;
+                background: linear-gradient(160deg, #0a1230, var(--panel));
+                border-radius: 18px;
+                border: 1px solid rgba(0, 246, 255, .28);
                 box-shadow: 0 0 40px rgba(0, 246, 255, .18);
+                position: relative;
+                z-index: 2;
+                animation: panelPulse 5s ease-in-out infinite alternate;
             }
 
-            to {
-                box-shadow: 0 0 70px rgba(168, 85, 255, .3);
+            @keyframes panelPulse {
+                from {
+                    box-shadow: 0 0 40px rgba(0, 246, 255, .18);
+                }
+
+                to {
+                    box-shadow: 0 0 70px rgba(168, 85, 255, .3);
+                }
             }
-        }
 
-        .login-panel::before,
-        .login-panel::after {
-            content: "";
-            position: absolute;
-            width: 60px;
-            height: 60px;
-            border: 2px solid var(--accent);
-            opacity: .6;
-        }
+            .login-panel::before,
+            .login-panel::after {
+                content: "";
+                position: absolute;
+                width: 60px;
+                height: 60px;
+                border: 2px solid var(--accent);
+                opacity: .6;
+            }
 
-        .login-panel::before {
-            top: -6px;
-            left: -6px;
-            border-right: none;
-            border-bottom: none;
-        }
+            .login-panel::before {
+                top: -6px;
+                left: -6px;
+                border-right: none;
+                border-bottom: none;
+            }
 
-        .login-panel::after {
-            bottom: -6px;
-            right: -6px;
-            border-left: none;
-            border-top: none;
-        }
+            .login-panel::after {
+                bottom: -6px;
+                right: -6px;
+                border-left: none;
+                border-top: none;
+            }
 
-        .login-panel h2 {
-            margin: 0 0 28px;
-            font-size: 2.2rem;
-            color: var(--accent2);
-            text-shadow: 0 0 14px rgba(168, 85, 255, .6);
-        }
+            .login-panel h2 {
+                margin: 0 0 28px;
+                font-size: 2.2rem;
+                color: var(--accent2);
+                text-shadow: 0 0 14px rgba(168, 85, 255, .6);
+            }
 
-        /* ======================
-   INPUT FIELDS
+            /* ======================
+INPUT FIELDS
 ====================== */
-        .field {
-            margin-bottom: 24px;
-        }
+            .field {
+                margin-bottom: 24px;
+            }
 
-        .field label {
-            display: block;
-            margin-bottom: 8px;
-            font-size: .9rem;
-            opacity: .8;
-            letter-spacing: 1px;
-        }
+            .field label {
+                display: block;
+                margin-bottom: 8px;
+                font-size: .9rem;
+                opacity: .8;
+                letter-spacing: 1px;
+            }
 
-        .field input {
-            width: 100%;
-            padding: 14px 16px;
-            font-family: Orbitron;
-            font-size: 1rem;
-            color: var(--text);
+            .field input {
+                width: 100%;
+                padding: 14px 16px;
+                font-family: Orbitron;
+                font-size: 1rem;
+                color: var(--text);
+                background: linear-gradient(145deg, #101a3d, #070b1d);
+                border: 1px solid rgba(0, 246, 255, .35);
+                border-radius: 10px;
+                outline: none;
+                box-shadow: inset 0 0 12px rgba(0, 246, 255, .12);
+                transition: border-color .3s ease, box-shadow .3s ease, transform .2s ease;
+            }
 
-            background: linear-gradient(145deg, #101a3d, #070b1d);
-            border: 1px solid rgba(0, 246, 255, .35);
-            border-radius: 10px;
+            .field input:hover {
+                transform: translateY(-1px);
+            }
 
-            outline: none;
-            box-shadow: inset 0 0 12px rgba(0, 246, 255, .12);
+            .field input:focus {
+                transform: translateY(-2px);
+                border-color: var(--accent);
+                box-shadow:
+                    0 0 12px rgba(0, 246, 255, .4),
+                    inset 0 0 14px rgba(0, 246, 255, .2);
+            }
 
-            transition: border-color .3s ease, box-shadow .3s ease, transform .2s ease;
-        }
-
-        .field input:hover {
-            transform: translateY(-1px);
-        }
-
-        .field input:focus {
-            transform: translateY(-2px);
-            border-color: var(--accent);
-            box-shadow:
-                0 0 12px rgba(0, 246, 255, .4),
-                inset 0 0 14px rgba(0, 246, 255, .2);
-        }
-
-        /* ======================
-   LOGIN BUTTON
+            /* ======================
+LOGIN BUTTON
 ====================== */
-        .login-btn {
-            width: 100%;
-            padding: 16px;
-            font-family: Orbitron;
-            font-size: 1.1rem;
-            color: var(--text);
+            .login-btn {
+                width: 100%;
+                padding: 16px;
+                font-family: Orbitron;
+                font-size: 1.1rem;
+                color: var(--text);
+                background: linear-gradient(145deg, #101a3d, #070b1d);
+                border: 1px solid rgba(0, 246, 255, .45);
+                border-radius: 12px;
+                cursor: pointer;
+                position: relative;
+                overflow: hidden;
+                box-shadow: 0 0 18px rgba(0, 246, 255, .22);
+                transition: .25s ease;
+            }
 
-            background: linear-gradient(145deg, #101a3d, #070b1d);
-            border: 1px solid rgba(0, 246, 255, .45);
-            border-radius: 12px;
+            .login-btn::after {
+                content: "";
+                position: absolute;
+                inset: 0;
+                background: linear-gradient(120deg,
+                        transparent,
+                        rgba(0, 246, 255, .35),
+                        transparent);
+                transform: translateX(-130%);
+            }
 
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
+            .login-btn:hover::after {
+                transform: translateX(130%);
+                transition: .6s;
+            }
 
-            box-shadow: 0 0 18px rgba(0, 246, 255, .22);
-            transition: .25s ease;
-        }
+            .login-btn:hover {
+                color: #fff;
+                transform: translateY(-2px) scale(1.04);
+                box-shadow: 0 0 36px rgba(0, 246, 255, .6);
+            }
 
-        .login-btn::after {
-            content: "";
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(120deg,
-                    transparent,
-                    rgba(0, 246, 255, .35),
-                    transparent);
-            transform: translateX(-130%);
-        }
+            .login-btn:active {
+                transform: translateY(2px) scale(0.98);
+            }
 
-        .login-btn:hover::after {
-            transform: translateX(130%);
-            transition: .6s;
-        }
-
-        .login-btn:hover {
-            color: #fff;
-            transform: translateY(-2px) scale(1.04);
-            box-shadow: 0 0 36px rgba(0, 246, 255, .6);
-        }
-
-        .login-btn:active {
-            transform: translateY(2px) scale(0.98);
-        }
-
-        /* ======================
-   SIGN UP LINK
+            /* ======================
+SIGN UP LINK
 ====================== */
-        .login-footer {
-            margin-top: 28px;
-            text-align: center;
-            font-size: .85rem;
-        }
+            .login-footer {
+                margin-top: 28px;
+                text-align: center;
+                font-size: .85rem;
+            }
 
-        .login-footer .hint {
-            display: block;
-            margin-bottom: 10px;
-            opacity: .6;
-        }
+            .login-footer .hint {
+                display: block;
+                margin-bottom: 10px;
+                opacity: .6;
+            }
 
+            .back-link {
+                margin-top: 10px;
+                background: none;
+                border: 1px solid rgba(168, 85, 255, .55);
+                color: var(--accent2);
+                font-family: Orbitron;
+                font-size: .85rem;
+                letter-spacing: 2px;
+                padding: 10px 22px;
+                border-radius: 999px;
+                cursor: pointer;
+                position: relative;
+                overflow: hidden;
+                box-shadow: 0 0 14px rgba(168, 85, 255, .18);
+                transition: .25s ease;
+            }
 
+            .back-link::after {
+                content: "";
+                position: absolute;
+                inset: 0;
+                background: linear-gradient(120deg,
+                        transparent,
+                        rgba(168, 85, 255, .35),
+                        transparent);
+                transform: translateX(-130%);
+            }
 
+            .back-link:hover::after {
+                transform: translateX(130%);
+                transition: .6s;
+            }
 
+            .back-link:hover {
+                color: #fff;
+                transform: translateY(-2px) scale(1.05);
+                box-shadow: 0 0 26px rgba(168, 85, 255, .55);
+            }
 
+            .back-link:active {
+                transform: translateY(2px) scale(0.98);
+            }
 
-        .back-link {
-            margin-top: 10px;
-            background: none;
-            border: 1px solid rgba(168, 85, 255, .55);
-            color: var(--accent2);
+            .signup-link {
+                background: none;
+                border: 1px solid rgba(168, 85, 255, .55);
+                color: var(--accent2);
+                font-family: Orbitron;
+                font-size: .85rem;
+                letter-spacing: 2px;
+                padding: 10px 22px;
+                border-radius: 999px;
+                cursor: pointer;
+                position: relative;
+                overflow: hidden;
+                box-shadow: 0 0 14px rgba(168, 85, 255, .18);
+                transition: .25s ease;
+            }
 
-            font-family: Orbitron;
-            font-size: .85rem;
-            letter-spacing: 2px;
+            .signup-link::after {
+                content: "";
+                position: absolute;
+                inset: 0;
+                background: linear-gradient(120deg,
+                        transparent,
+                        rgba(168, 85, 255, .35),
+                        transparent);
+                transform: translateX(-130%);
+            }
 
-            padding: 10px 22px;
-            border-radius: 999px;
+            .signup-link:hover::after {
+                transform: translateX(130%);
+                transition: .6s;
+            }
 
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
+            .signup-link:hover {
+                color: #fff;
+                transform: translateY(-2px) scale(1.05);
+                box-shadow: 0 0 26px rgba(168, 85, 255, .55);
+            }
 
-            box-shadow: 0 0 14px rgba(168, 85, 255, .18);
-            transition: .25s ease;
-        }
+            .signup-link:active {
+                transform: translateY(2px) scale(0.98);
+            }
+        </style>
+    </head>
 
-        .back-link::after {
-            content: "";
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(120deg,
-                    transparent,
-                    rgba(168, 85, 255, .35),
-                    transparent);
-            transform: translateX(-130%);
-        }
-
-        .back-link:hover::after {
-            transform: translateX(130%);
-            transition: .6s;
-        }
-
-        .back-link:hover {
-            color: #fff;
-            transform: translateY(-2px) scale(1.05);
-            box-shadow: 0 0 26px rgba(168, 85, 255, .55);
-        }
-
-        .back-link:active {
-            transform: translateY(2px) scale(0.98);
-        }
-
-
-
-
-
-
-
-        .signup-link {
-            background: none;
-            border: 1px solid rgba(168, 85, 255, .55);
-            color: var(--accent2);
-
-            font-family: Orbitron;
-            font-size: .85rem;
-            letter-spacing: 2px;
-
-            padding: 10px 22px;
-            border-radius: 999px;
-
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
-
-            box-shadow: 0 0 14px rgba(168, 85, 255, .18);
-            transition: .25s ease;
-        }
-
-        .signup-link::after {
-            content: "";
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(120deg,
-                    transparent,
-                    rgba(168, 85, 255, .35),
-                    transparent);
-            transform: translateX(-130%);
-        }
-
-        .signup-link:hover::after {
-            transform: translateX(130%);
-            transition: .6s;
-        }
-
-        .signup-link:hover {
-            color: #fff;
-            transform: translateY(-2px) scale(1.05);
-            box-shadow: 0 0 26px rgba(168, 85, 255, .55);
-        }
-
-        .signup-link:active {
-            transform: translateY(2px) scale(0.98);
-        }
-    </style>
-</head>
-
-<body>
-
-    <div class="title-box">
-        <h1>Glad to see you back!</h1>
-    </div>
-
-    <div class="login-panel">
-        <h2>Login</h2>
-
-        <div class="field">
-            <label>USERNAME</label>
-            <input type="text" placeholder="Enter your username">
+    <body>
+        <div class="title-box">
+            <h1>Glad to see you back!</h1>
         </div>
-
-        <div class="field">
-            <label>PASSWORD</label>
-            <input type="password" placeholder="Enter your password">
+        <div class="login-panel">
+            <h2>Login</h2>
+            <div class="field">
+                <label>USERNAME</label>
+                <input type="text" placeholder="Enter your username">
+            </div>
+            <div class="field">
+                <label>PASSWORD</label>
+                <input type="password" placeholder="Enter your password">
+            </div>
+            <button id='login-button' onclick='login(document.getElementById("signup-username").value.trim(), document.getElementById("signup-password").value.trim())' class="login-btn">INITIALIZE SESSION</button>
+            <div class="login-footer">
+                <span class="hint">No access key?</span>
+                <button onclick="showPage('page-signup')" class="signup-link">Signup</button>
+                <button onclick="showPage('page-main')" class="back-link">
+                    <- Back </button>
+            </div>
         </div>
+    </body>
 
-        <button class="login-btn">INITIALIZE SESSION</button>
-
-        <div class="login-footer">
-            <span class="hint">No access key?</span>
-            <button onclick="showPage('page-signup')" class="signup-link">Signup</button>
-            <button onclick="showPage('page-main')" class="back-link"><- Back</button>
-            
-            
-        </div>
-    </div>
-
-</body>
-
-</html>
+    </html>
 </div>
 
 <div id="page-signup" hidden>
     <!DOCTYPE html>
-<html lang="en">
+    <html lang="en">
 
-<head>
-    <meta charset="UTF-8">
-    <title>ItsMrToolkit — Login</title>
+    <head>
 
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&display=swap" rel="stylesheet">
+        <meta charset="UTF-8">
+        <title>ItsMrToolkit — Login</title>
+        <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&display=swap" rel="stylesheet">
 
-    <style>
-        :root {
-            --bg: #050814;
-            --panel: #0b1024cc;
-            --accent: #00cbd2;
-            --accent2: #a855ff;
-            --text: #e6f1ff;
-        }
+        <style>
+            :root {
+                --bg: #050814;
+                --panel: #0b1024cc;
+                --accent: #00cbd2;
+                --accent2: #a855ff;
+                --text: #e6f1ff;
+            }
 
-        * {
-            box-sizing: border-box;
-        }
+            * {
+                box-sizing: border-box;
+            }
 
-        html,
-        body {
-            height: auto;
-            min-height: 100%;
-        }
+            html,
+            body {
+                height: auto;
+                min-height: 100%;
+            }
 
-        body {
-            margin: 0;
-            padding: 90px 20px 140px;
-            min-height: 100vh;
-            position: relative;
+            body {
+                margin: 0;
+                padding: 90px 20px 140px;
+                min-height: 100vh;
+                position: relative;
+                font-family: Orbitron, sans-serif;
+                color: var(--text);
+                background:
+                    radial-gradient(circle at 10% 10%, #0c1b4d 0%, transparent 40%),
+                    radial-gradient(circle at 90% 20%, #2a0c4d 0%, transparent 45%),
+                    linear-gradient(180deg, #02040a, var(--bg));
+                overflow-x: hidden;
+            }
 
-            font-family: Orbitron, sans-serif;
-            color: var(--text);
+            /* HUD FRAME (SCROLLS WITH CONTENT) */
+            body::before,
+            body::after {
+                content: "";
+                position: absolute;
+                inset: 20px;
+                pointer-events: none;
+                border: 1px solid rgba(0, 246, 255, .18);
+                box-shadow: inset 0 0 30px rgba(0, 246, 255, .08);
+                z-index: 0;
+            }
 
-            background:
-                radial-gradient(circle at 10% 10%, #0c1b4d 0%, transparent 40%),
-                radial-gradient(circle at 90% 20%, #2a0c4d 0%, transparent 45%),
-                linear-gradient(180deg, #02040a, var(--bg));
+            body::after {
+                inset: 42px;
+                border-color: rgba(168, 85, 255, .14);
+            }
 
-            overflow-x: hidden;
-        }
-
-        /* HUD FRAME (SCROLLS WITH CONTENT) */
-        body::before,
-        body::after {
-            content: "";
-            position: absolute;
-            inset: 20px;
-            pointer-events: none;
-            border: 1px solid rgba(0, 246, 255, .18);
-            box-shadow: inset 0 0 30px rgba(0, 246, 255, .08);
-            z-index: 0;
-        }
-
-        body::after {
-            inset: 42px;
-            border-color: rgba(168, 85, 255, .14);
-        }
-
-        /* ======================
-   TITLE BOX
+            /* ======================
+TITLE BOX
 ====================== */
-        .title-box {
-            max-width: 760px;
-            margin: 0 auto 80px;
-            padding: 30px 50px;
-            text-align: center;
+            .title-box {
+                max-width: 760px;
+                margin: 0 auto 80px;
+                padding: 30px 50px;
+                text-align: center;
+                background: linear-gradient(160deg, rgba(10, 18, 48, .9), rgba(11, 16, 36, .95));
+                border-radius: 22px;
+                border: 1px solid rgba(0, 246, 255, .35);
+                box-shadow:
+                    0 0 55px rgba(0, 246, 255, .22),
+                    inset 0 0 26px rgba(0, 246, 255, .08);
+                position: relative;
+                overflow: hidden;
+                z-index: 1;
+            }
 
-            background: linear-gradient(160deg, rgba(10, 18, 48, .9), rgba(11, 16, 36, .95));
-            border-radius: 22px;
-            border: 1px solid rgba(0, 246, 255, .35);
+            .title-box::before,
+            .title-box::after {
+                content: "";
+                position: absolute;
+                width: 90px;
+                height: 90px;
+                border: 2px solid var(--accent);
+                opacity: .75;
+            }
 
-            box-shadow:
-                0 0 55px rgba(0, 246, 255, .22),
-                inset 0 0 26px rgba(0, 246, 255, .08);
+            .title-box::before {
+                top: -10px;
+                left: -10px;
+                border-right: none;
+                border-bottom: none;
+            }
 
-            position: relative;
-            overflow: hidden;
-            z-index: 1;
-        }
+            .title-box::after {
+                bottom: -10px;
+                right: -10px;
+                border-left: none;
+                border-top: none;
+            }
 
-        .title-box::before,
-        .title-box::after {
-            content: "";
-            position: absolute;
-            width: 90px;
-            height: 90px;
-            border: 2px solid var(--accent);
-            opacity: .75;
-        }
+            .title-box h1 {
+                margin: 0;
+                font-size: 3.6rem;
+                letter-spacing: 6px;
+                color: #00f6ff;
+                text-shadow:
+                    0 0 14px #00f6ff,
+                    0 0 40px rgba(168, 85, 255, .6);
+            }
 
-        .title-box::before {
-            top: -10px;
-            left: -10px;
-            border-right: none;
-            border-bottom: none;
-        }
-
-        .title-box::after {
-            bottom: -10px;
-            right: -10px;
-            border-left: none;
-            border-top: none;
-        }
-
-        .title-box h1 {
-            margin: 0;
-            font-size: 3.6rem;
-            letter-spacing: 6px;
-            color: #00f6ff;
-            text-shadow:
-                0 0 14px #00f6ff,
-                0 0 40px rgba(168, 85, 255, .6);
-        }
-
-        /* ======================
-   LOGIN PANEL
+            /* ======================
+LOGIN PANEL
 ====================== */
-        .login-panel {
-            max-width: 520px;
-            margin: 0 auto;
-            padding: 44px 46px;
-
-            background: linear-gradient(160deg, #0a1230, var(--panel));
-            border-radius: 18px;
-            border: 1px solid rgba(0, 246, 255, .28);
-
-            box-shadow: 0 0 40px rgba(0, 246, 255, .18);
-
-            position: relative;
-            z-index: 2;
-
-            animation: panelPulse 5s ease-in-out infinite alternate;
-        }
-
-        @keyframes panelPulse {
-            from {
+            .login-panel {
+                max-width: 520px;
+                margin: 0 auto;
+                padding: 44px 46px;
+                background: linear-gradient(160deg, #0a1230, var(--panel));
+                border-radius: 18px;
+                border: 1px solid rgba(0, 246, 255, .28);
                 box-shadow: 0 0 40px rgba(0, 246, 255, .18);
+                position: relative;
+                z-index: 2;
+                animation: panelPulse 5s ease-in-out infinite alternate;
             }
 
-            to {
-                box-shadow: 0 0 70px rgba(168, 85, 255, .3);
+            @keyframes panelPulse {
+                from {
+                    box-shadow: 0 0 40px rgba(0, 246, 255, .18);
+                }
+
+                to {
+                    box-shadow: 0 0 70px rgba(168, 85, 255, .3);
+                }
             }
-        }
 
-                .back-link {
-            margin-top: 10px;
-            background: none;
-            border: 1px solid rgba(168, 85, 255, .55);
-            color: var(--accent2);
+            .back-link {
+                margin-top: 10px;
+                background: none;
+                border: 1px solid rgba(168, 85, 255, .55);
+                color: var(--accent2);
+                font-family: Orbitron;
+                font-size: .85rem;
+                letter-spacing: 2px;
+                padding: 10px 22px;
+                border-radius: 999px;
+                cursor: pointer;
+                position: relative;
+                overflow: hidden;
+                box-shadow: 0 0 14px rgba(168, 85, 255, .18);
+                transition: .25s ease;
+            }
 
-            font-family: Orbitron;
-            font-size: .85rem;
-            letter-spacing: 2px;
+            .back-link::after {
+                content: "";
+                position: absolute;
+                inset: 0;
+                background: linear-gradient(120deg,
+                        transparent,
+                        rgba(168, 85, 255, .35),
+                        transparent);
+                transform: translateX(-130%);
+            }
 
-            padding: 10px 22px;
-            border-radius: 999px;
+            .back-link:hover::after {
+                transform: translateX(130%);
+                transition: .6s;
+            }
 
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
+            .back-link:hover {
+                color: #fff;
+                transform: translateY(-2px) scale(1.05);
+                box-shadow: 0 0 26px rgba(168, 85, 255, .55);
+            }
 
-            box-shadow: 0 0 14px rgba(168, 85, 255, .18);
-            transition: .25s ease;
-        }
+            .back-link:active {
+                transform: translateY(2px) scale(0.98);
+            }
 
-        .back-link::after {
-            content: "";
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(120deg,
-                    transparent,
-                    rgba(168, 85, 255, .35),
-                    transparent);
-            transform: translateX(-130%);
-        }
+            .login-panel::before,
+            .login-panel::after {
+                content: "";
+                position: absolute;
+                width: 60px;
+                height: 60px;
+                border: 2px solid var(--accent);
+                opacity: .6;
+            }
 
-        .back-link:hover::after {
-            transform: translateX(130%);
-            transition: .6s;
-        }
+            .login-panel::before {
+                top: -6px;
+                left: -6px;
+                border-right: none;
+                border-bottom: none;
+            }
 
-        .back-link:hover {
-            color: #fff;
-            transform: translateY(-2px) scale(1.05);
-            box-shadow: 0 0 26px rgba(168, 85, 255, .55);
-        }
+            .login-panel::after {
+                bottom: -6px;
+                right: -6px;
+                border-left: none;
+                border-top: none;
+            }
 
-        .back-link:active {
-            transform: translateY(2px) scale(0.98);
-        }
+            .login-panel h2 {
+                margin: 0 0 28px;
+                font-size: 2.2rem;
+                color: var(--accent2);
+                text-shadow: 0 0 14px rgba(168, 85, 255, .6);
+            }
 
-
-        .login-panel::before,
-        .login-panel::after {
-            content: "";
-            position: absolute;
-            width: 60px;
-            height: 60px;
-            border: 2px solid var(--accent);
-            opacity: .6;
-        }
-
-        .login-panel::before {
-            top: -6px;
-            left: -6px;
-            border-right: none;
-            border-bottom: none;
-        }
-
-        .login-panel::after {
-            bottom: -6px;
-            right: -6px;
-            border-left: none;
-            border-top: none;
-        }
-
-        .login-panel h2 {
-            margin: 0 0 28px;
-            font-size: 2.2rem;
-            color: var(--accent2);
-            text-shadow: 0 0 14px rgba(168, 85, 255, .6);
-        }
-
-        /* ======================
-   INPUT FIELDS
+            /* ======================
+INPUT FIELDS
 ====================== */
-        .field {
-            margin-bottom: 24px;
-        }
+            .field {
+                margin-bottom: 24px;
+            }
 
-        .field label {
-            display: block;
-            margin-bottom: 8px;
-            font-size: .9rem;
-            opacity: .8;
-            letter-spacing: 1px;
-        }
+            .field label {
+                display: block;
+                margin-bottom: 8px;
+                font-size: .9rem;
+                opacity: .8;
+                letter-spacing: 1px;
+            }
 
-        .field input {
-            width: 100%;
-            padding: 14px 16px;
-            font-family: Orbitron;
-            font-size: 1rem;
-            color: var(--text);
+            .field input {
+                width: 100%;
+                padding: 14px 16px;
+                font-family: Orbitron;
+                font-size: 1rem;
+                color: var(--text);
+                background: linear-gradient(145deg, #101a3d, #070b1d);
+                border: 1px solid rgba(0, 246, 255, .35);
+                border-radius: 10px;
+                outline: none;
+                box-shadow: inset 0 0 12px rgba(0, 246, 255, .12);
+                transition: border-color .3s ease, box-shadow .3s ease, transform .2s ease;
+            }
 
-            background: linear-gradient(145deg, #101a3d, #070b1d);
-            border: 1px solid rgba(0, 246, 255, .35);
-            border-radius: 10px;
+            .field input:hover {
+                transform: translateY(-1px);
+            }
 
-            outline: none;
-            box-shadow: inset 0 0 12px rgba(0, 246, 255, .12);
+            .field input:focus {
+                transform: translateY(-2px);
+                border-color: var(--accent);
+                box-shadow:
+                    0 0 12px rgba(0, 246, 255, .4),
+                    inset 0 0 14px rgba(0, 246, 255, .2);
+            }
 
-            transition: border-color .3s ease, box-shadow .3s ease, transform .2s ease;
-        }
-
-        .field input:hover {
-            transform: translateY(-1px);
-        }
-
-        .field input:focus {
-            transform: translateY(-2px);
-            border-color: var(--accent);
-            box-shadow:
-                0 0 12px rgba(0, 246, 255, .4),
-                inset 0 0 14px rgba(0, 246, 255, .2);
-        }
-
-        /* ======================
-   LOGIN BUTTON
+            /* ======================
+LOGIN BUTTON
 ====================== */
-        .login-btn {
-            width: 100%;
-            padding: 16px;
-            font-family: Orbitron;
-            font-size: 1.1rem;
-            color: var(--text);
+            .login-btn {
+                width: 100%;
+                padding: 16px;
+                font-family: Orbitron;
+                font-size: 1.1rem;
+                color: var(--text);
+                background: linear-gradient(145deg, #101a3d, #070b1d);
+                border: 1px solid rgba(0, 246, 255, .45);
+                border-radius: 12px;
+                cursor: pointer;
+                position: relative;
+                overflow: hidden;
+                box-shadow: 0 0 18px rgba(0, 246, 255, .22);
+                transition: .25s ease;
+            }
 
-            background: linear-gradient(145deg, #101a3d, #070b1d);
-            border: 1px solid rgba(0, 246, 255, .45);
-            border-radius: 12px;
+            .login-btn::after {
+                content: "";
+                position: absolute;
+                inset: 0;
+                background: linear-gradient(120deg,
+                        transparent,
+                        rgba(0, 246, 255, .35),
+                        transparent);
+                transform: translateX(-130%);
+            }
 
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
+            .login-btn:hover::after {
+                transform: translateX(130%);
+                transition: .6s;
+            }
 
-            box-shadow: 0 0 18px rgba(0, 246, 255, .22);
-            transition: .25s ease;
-        }
+            .login-btn:hover {
+                color: #fff;
+                transform: translateY(-2px) scale(1.04);
+                box-shadow: 0 0 36px rgba(0, 246, 255, .6);
+            }
 
-        .login-btn::after {
-            content: "";
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(120deg,
-                    transparent,
-                    rgba(0, 246, 255, .35),
-                    transparent);
-            transform: translateX(-130%);
-        }
+            .login-btn:active {
+                transform: translateY(2px) scale(0.98);
+            }
 
-        .login-btn:hover::after {
-            transform: translateX(130%);
-            transition: .6s;
-        }
-
-        .login-btn:hover {
-            color: #fff;
-            transform: translateY(-2px) scale(1.04);
-            box-shadow: 0 0 36px rgba(0, 246, 255, .6);
-        }
-
-        .login-btn:active {
-            transform: translateY(2px) scale(0.98);
-        }
-
-        /* ======================
-   SIGN UP LINK
+            /* ======================
+SIGN UP LINK
 ====================== */
-        .login-footer {
-            margin-top: 28px;
-            text-align: center;
-            font-size: .85rem;
-        }
+            .login-footer {
+                margin-top: 28px;
+                text-align: center;
+                font-size: .85rem;
+            }
 
-        .login-footer .hint {
-            display: block;
-            margin-bottom: 10px;
-            opacity: .6;
-        }
+            .login-footer .hint {
+                display: block;
+                margin-bottom: 10px;
+                opacity: .6;
+            }
 
-        .signup-link {
-            background: none;
-            border: 1px solid rgba(168, 85, 255, .55);
-            color: var(--accent2);
+            .signup-link {
+                background: none;
+                border: 1px solid rgba(168, 85, 255, .55);
+                color: var(--accent2);
+                font-family: Orbitron;
+                font-size: .85rem;
+                letter-spacing: 2px;
+                padding: 10px 22px;
+                border-radius: 999px;
+                cursor: pointer;
+                position: relative;
+                overflow: hidden;
+                box-shadow: 0 0 14px rgba(168, 85, 255, .18);
+                transition: .25s ease;
+            }
 
-            font-family: Orbitron;
-            font-size: .85rem;
-            letter-spacing: 2px;
+            .signup-link::after {
+                content: "";
+                position: absolute;
+                inset: 0;
+                background: linear-gradient(120deg,
+                        transparent,
+                        rgba(168, 85, 255, .35),
+                        transparent);
+                transform: translateX(-130%);
+            }
 
-            padding: 10px 22px;
-            border-radius: 999px;
+            .signup-link:hover::after {
+                transform: translateX(130%);
+                transition: .6s;
+            }
 
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
+            .signup-link:hover {
+                color: #fff;
+                transform: translateY(-2px) scale(1.05);
+                box-shadow: 0 0 26px rgba(168, 85, 255, .55);
+            }
 
-            box-shadow: 0 0 14px rgba(168, 85, 255, .18);
-            transition: .25s ease;
-        }
+            .signup-link:active {
+                transform: translateY(2px) scale(0.98);
+            }
+        </style>
+    </head>
 
-        .signup-link::after {
-            content: "";
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(120deg,
-                    transparent,
-                    rgba(168, 85, 255, .35),
-                    transparent);
-            transform: translateX(-130%);
-        }
+    <body>
 
-        .signup-link:hover::after {
-            transform: translateX(130%);
-            transition: .6s;
-        }
-
-        .signup-link:hover {
-            color: #fff;
-            transform: translateY(-2px) scale(1.05);
-            box-shadow: 0 0 26px rgba(168, 85, 255, .55);
-        }
-
-        .signup-link:active {
-            transform: translateY(2px) scale(0.98);
-        }
-
-        
-    </style>
-</head>
-
-<body>
-
-    <div class="title-box">
-        <h1>Grab a new account!</h1>
-    </div>
-
-    <div class="login-panel">
-        <h2>Signup</h2>
-
-        <div class="field">
-            <label>USERNAME</label>
-            <input type="text" placeholder="Enter your username">
+        <div class="title-box">
+            <h1>Grab a new account!</h1>
         </div>
+        <div class="login-panel">
+            <h2>Signup</h2>
+            <div class="field">
+                <label>USERNAME</label>
+                <input id='signup-username' type="text" placeholder="Enter your username">
+            </div>
+            <div class="field">
+                <label>PASSWORD</label>
+                <input id='signup-password' type="password" placeholder="Enter your password">
+            </div>
 
-        <div class="field">
-            <label>PASSWORD</label>
-            <input type="password" placeholder="Enter your password">
+
+            <button id='signup-button' onclick='signup(document.getElementById("signup-username").value.trim(), document.getElementById("signup-password").value.trim())' class="login-btn">REQUEST CLEARANCE</button>
+            <div class="login-footer">
+                <span class="hint">Got a key already?</span>
+                <button onclick="showPage('page-login')" class="signup-link">Login</button>
+                <button onclick="showPage('page-main')" class="back-link">
+                    <- Back </button>
+            </div>
         </div>
+    </body>
 
-        <button class="login-btn">REQUEST CLEARANCE</button>
-
-        <div class="login-footer">
-            <span class="hint">Got a key already? </span>
-            
-            <button onclick="showPage('page-login')" class="signup-link">Login</button>
-            <button onclick="showPage('page-main')" class="back-link"><- Back</button>
-        </div>
-    </div>
-
-</body>
-
-</html>
+    </html>
 </div>
-<script>
-function showPage(id) {
-    document.getElementById('page-main').hidden = true;
-    document.getElementById('page-login').hidden = true;
-    document.getElementById('page-signup').hidden = true;
 
-    document.getElementById(id).hidden = false;
-}
+<script>
+    function showPage(id) {
+        document.getElementById('page-main').hidden = true;
+        document.getElementById('page-login').hidden = true;
+        document.getElementById('page-signup').hidden = true;
+        document.getElementById(id).hidden = false;
+    }
 </script>
