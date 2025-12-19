@@ -592,6 +592,7 @@ FLOATING PARTICLES
                 }
             }
 
+
             body {
                 cursor: url("data:image/png;iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAMAAACdt4HsAAAABGdBTUEAALGPC/xhBQAAAQ5QTFRF6+vr6urq6Ojo7+/v6Ojo7+/v8vLy5OTk8vLy4+Pj9fX1/f399/f39vb2zMzM29vb+fn5+fn539/f0tLS2NjY4ODg/f39////////////1dXV6urq2NjY3Nzc7u7u3d3d////////////////////AAAA+fn5/v7+6Ojo9vb24uLi/Pz87+/v8fHx5eXl8/Pz3Nzc+/v739/f4ODg6enp3d3d/f392dnZ+Pj44+Pj9fX17u7u7Ozs5ubm29vb1dXV1tbW09PTzc3Nzs7O6+vr1NTU19fX0tLS2NjY9/f30NDQ0dHR+vr62tra3t7ez8/P4eHh8vLy5+fn5OTk6urq8PDw9PT07e3tzMzM////jfWFqAAAACZ0Uk5TP5/ff2/fT5+vP39/H9/vP0+vb+/f399fzz+fb2+fDw9/r99PHwCLHpKhAAACD0lEQVRYw+3WV5eaQAAFYNM3Pdn0tu6q6NpFBVEpFlSkilJm/v8fCc09IBiY+Mp9v99cDuVQwC5MIQdy4AT4UbkM+A7hXfkC4Bt0U7qt/C9QhkHQZoQuoXQUkGaEgFsYSuYZIaACI8k4I3wb7yCs1WqIM8JAGdZIskmizYg8iV/JJo7LzeilpMyIAK+buCxXqRPh3zMiQMWtU9s6Dk9zfkb0ZfpYpbbb+mQix4SzM6LAB69udbsJwpkZJ6/z2/rEsrq63q4mCc6MNOCVXzfNFgUhpSesSAHedLt6u222plPb6gAAhJiR9kW6cuutqW3TdQKABCINeG56x9O8Tco9kECkfhOfuXWaNyxS3rIgTqQCT5z1vGEMdQewRiBGpAI3NM8bw+H9Pe4ApnAUAIdnBLBHbn2/Z1ouYK8fhH5WoOCcvmeYzoFyAWP2IGQFsMde/TCmPWDPIQNPmU7nMB43dhMPOMxRgRu/vhsMfWC3QQSwF+NGYzcY9FXdB1QJEXjp11WCCQBFRAOwL4N+XyWIHjsNgLWGBlz7dVYZH4HVArAIQFElej1WUUYj/ghI2gQBwP54dUFYK0wAiJqNArxnndOF9WzGrVbzzUYSRW25pBEA7LNTX884bjWfbyRJ1LTlYgF4BOC3f3y47oTPDhSj6xfB08xnBrCfXLzuCqWsQPFTdH2Qd7/yX90cyIEcOJe/QNzggxoFfuEAAAAASUVORK5CYII="), 32, 32, auto;
             }
@@ -845,18 +846,16 @@ FLOATING PARTICLES
 
         const {
             error
-        } = await supabase.auth.signInWithPassword({
+        } = await client.auth.signInWithPassword({
             email,
             password
         });
 
         if (error) {
-            alert("Invalid username or password");
+            showTopMessage("Invalid username or password");
             return;
         }
-
-        alert("Logged in!");
-        window.location.href = "app.html";
+        showTopMessage("Logged in!");
     }
 
     async function signup(username, password) {
@@ -874,7 +873,7 @@ FLOATING PARTICLES
         });
 
         if (error) {
-            alert(error.message);
+            showTopMessage(error.message);
             return;
         }
 
@@ -888,11 +887,11 @@ FLOATING PARTICLES
             });
 
         if (profileError) {
-            alert("Username already taken");
+            showTopMessage("Username already taken");
             return;
         }
 
-        alert("Account created!");
+        showTopMessage("Account created!");
         showPage("page-login");
         window.signup = signup;
         window.login = login;
@@ -1253,10 +1252,71 @@ SIGN UP LINK
             .signup-link:active {
                 transform: translateY(2px) scale(0.98);
             }
+            .text-element {
+                animation: slideInOut 3s forwards;
+            }
+
+            @keyframes slideInOut {
+                0% { 
+                    opacity: 0; 
+                    transform: translateY(100px); /* Start 100px below */
+                }
+                20% { 
+                    opacity: 1; 
+                    transform: translateY(0); /* Slide to normal position */
+                }
+                80% { 
+                    opacity: 1; 
+                    transform: translateY(0); /* Stay visible */
+                }
+                100% { 
+                    opacity: 0; 
+                    transform: translateY(-100px); /* Slide up 100px and fade */
+                }
+            }
+            #top-notification {
+                position: fixed;
+                top: -60px;
+                left: 50%;
+                transform: translateX(-50%);
+                background: rgba(0, 203, 210, 0.95);
+                color: #000;
+                padding: 14px 28px;
+                border-radius: 0 0 12px 12px;
+                font-family: Orbitron, sans-serif;
+                font-size: 14px;
+                letter-spacing: 1px;
+                box-shadow: 0 8px 25px rgba(0, 203, 210, 0.4);
+                z-index: 9999;
+                opacity: 0;
+                transition: top 0.4s ease, opacity 0.4s ease;
+            }
+
+            #top-notification.show {
+                top: 0;
+                opacity: 1;
+            }
+
         </style>
     </head>
+<script>
+function showTopMessage(text, duration = 3000) {
+    const notif = document.getElementById("top-notification");
+
+    notif.textContent = text;
+    notif.classList.add("show");
+
+    clearTimeout(notif._hideTimeout);
+
+    notif._hideTimeout = setTimeout(() => {
+        notif.classList.remove("show");
+    }, duration);
+}
+</script>
 
     <body>
+        <div id="top-notification"></div>
+
         <div class="title-box">
             <h1>Glad to see you back!</h1>
         </div>
@@ -1264,13 +1324,13 @@ SIGN UP LINK
             <h2>Login</h2>
             <div class="field">
                 <label>USERNAME</label>
-                <input type="text" placeholder="Enter your username">
+                <input id='login-username' type="text" placeholder="Enter your username">
             </div>
             <div class="field">
                 <label>PASSWORD</label>
-                <input type="password" placeholder="Enter your password">
+                <input id='login-password' type="password" placeholder="Enter your password">
             </div>
-            <button id='login-button' onclick='login(document.getElementById("signup-username").value.trim(), document.getElementById("signup-password").value.trim())' class="login-btn">INITIALIZE SESSION</button>
+            <button id='login-button' onclick='login(document.getElementById("login-username").value.trim(), document.getElementById("login-password").value.trim())' class="login-btn">INITIALIZE SESSION</button>
             <div class="login-footer">
                 <span class="hint">No access key?</span>
                 <button onclick="showPage('page-signup')" class="signup-link">Signup</button>
