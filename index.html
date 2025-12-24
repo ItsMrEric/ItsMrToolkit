@@ -1,3 +1,73 @@
+
+<style>
+/* =========================
+CUSTOM NOTICE SYSTEM
+========================= */
+
+#notice-container {
+  position: fixed;
+  top: 30px;
+  right: 30px;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.notice {
+  min-width: 260px;
+  padding: 16px 20px;
+  font-family: Orbitron, sans-serif;
+  font-size: 0.9rem;
+  color: #e6f1ff;
+  background: linear-gradient(145deg, #0a1230, #070b1d);
+  border: 1px solid rgba(0, 246, 255, 0.4);
+  border-radius: 12px;
+  box-shadow: 0 0 22px rgba(0, 246, 255, 0.35);
+  opacity: 0;
+  transform: translateX(40px);
+  animation: noticeIn 0.4s ease forwards;
+}
+
+.notice.success {
+  border-color: #87ffad;
+  box-shadow: 0 0 24px rgba(135, 255, 173, 0.5);
+}
+
+.notice.error {
+  border-color: #ff8787;
+  box-shadow: 0 0 24px rgba(255, 135, 135, 0.5);
+}
+
+.notice.info {
+  border-color: #87cfff;
+  box-shadow: 0 0 24px rgba(135, 207, 255, 0.5);
+}
+
+.notice.hide {
+  animation: noticeOut 0.4s ease forwards;
+}
+
+@keyframes noticeIn {
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes noticeOut {
+  to {
+    opacity: 0;
+    transform: translateX(40px);
+  }
+}
+</style>
+<script>
+    window.accountActive = false;
+    window.accountName = null;
+    window.connected = false;
+</script>
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <div id="page-main">
     <!DOCTYPE html>
@@ -20,7 +90,15 @@
             * {
                 box-sizing: border-box
             }
-
+            #login-signup-button {
+                transition: filter 0.3s ease, pointer-events 0.3s ease, opacity 0.3s ease;
+            }
+            .blurred {
+                filter: blur(5px);
+                pointer-events: none; /* disables clicks */
+                opacity: 0.6;         /* optional visual dimming */
+                cursor: default;
+            }
             body {
                 margin: 0;
                 padding: 70px 20px;
@@ -635,7 +713,30 @@ FLOATING PARTICLES
             }
             typeEmail();
         </script>
-        <section>
+        <section id="account-section">
+            <h2>You are logged in</h2>
+            <div class='meta' id="account-shower"></div>
+            <script>
+                document.getElementById('account-shower').textContent = 'You are currently logged in as ' + window.accountName
+            </script>
+            <ul>
+                <li>
+                    <button onclick="signout()">
+                        <b>-> <span style="color:#a1adff">Signout</span> <- </b> Signout from your account
+                    </button>
+                </li>
+            </ul>
+        </section>
+        <script>
+            function showAccountElement() {
+                document.getElementById('account-section').style.display = 'block'
+            }
+            function removeAccountElement() {
+                document.getElementById('account-section').style.display = 'none'
+            }
+            document.getElementById('account-section').style.display = 'none'
+        </script>
+        <section id="login-signup-section">
             <h2>Signup / Login</h2>
             <div class="meta">If you are a admin or you just simply wants to do this</div>
             <ul>
@@ -646,11 +747,20 @@ FLOATING PARTICLES
                 </li>
                 <li>
                     <button onclick="showPage('page-signup')">
-                        <b>-> <span style="color:#a1ffa6">signUp</span>
+                        <b>-> <span style="color:#a1ffa6">signup</span>
                             <- </b> Create an account with a username and password </button>
                 </li>
             </ul>
         </section>
+        <script>
+            function showLoginSignupElement() {
+                document.getElementById('login-signup-section').style.display = 'block'
+            }
+            function removeLoginSignupElement() {
+                document.getElementById('login-signup-section').style.display = 'none'
+            }
+            document.getElementById('login-signup-section').style.display = 'block'
+        </script>
         <section>
             <h2>Games - Click to go to download website</h2>
             <ul>
@@ -786,9 +896,21 @@ FLOATING PARTICLES
                         <b style="color:#00ffff">Main</b>.txt → BaiduNetDisk </button>
                 </li>
                 <div class="meta">Text • ~ 12 KB | BaiduNetDisk code: <b style="color:#00ffff">9hva</b>
-                    <br>Main tutorial of ItsMrToolkit, with the following tutorial classes: <br>1. Original Minecro-Republic README <br>2. MINECRAFT TUTORIALS <br>3. Useful Tutorials <br>4. BLOXD TUTORIALS <br>5. VPN <br>6. Files <br>7. CURRENT PROBLEMS
+                    <br>Main tutorial of ItsMrToolkit, with the following tutorial classes: <br>1. Original Minecro-Republic README <br>2. Minecraft tutorials <br>3. (Other) Useful Tutorials <br>4. Bloxd tutorials <br>5. VPN <br>6. Files <br>7. Current problems
                 </div>
             </ul>
+                <section>
+            <h2>Restricted Access</h2>
+            <ul>
+                <li>
+                    <button onclick="checkOpenWebsite('https://www.bloxd.io')">
+                        <b style="color:#ff0000">Main</b>.txt → BaiduNetDisk </button>
+                </li>
+                <div class="meta">Text • ~ 12 KB | BaiduNetDisk code: <b style="color:#00ffff">9hva</b>
+                    <br>Restricted document, with the tutorial on how to get yourself out of the school organization (become the administrator of the computer) - <b style="color:#ff0000">EXTREMELY DANGEROUS, UNTESTED - USE THIS AT YOUR OWN RISK!</b>
+                </div>
+            </ul>
+        </section>
         </section>
         <section>
             <h2>Recommended Websites</h2>
@@ -798,7 +920,7 @@ FLOATING PARTICLES
                         <b style="color:#87ff8b">Bloxd</b>.io - Click to play </button>
                 </li>
                 <div class='meta'>Web Game <br>Join bloxd with a collection of online games like bedwars, skywars. Build, pvp, and explore in block worlds. <br>
-                    <b>Sadly, Bloxd can not be played in school. Or thats what I currently know. But you can access it via Opera GX with VPN. Get more in the main tutorial document.</b>
+                    <b>Sadly, Bloxd can not be played in school, and thats all I currently know. But you can access it via Opera GX with VPN. Get more in the main tutorial document.</b>
                 </div>
                 <li>
                     <button onclick="openWebsite('https://www.kour.io')">
@@ -808,13 +930,42 @@ FLOATING PARTICLES
                 </div>
                 <li>
                     <button onclick="openWebsite('https://poki.com')">
-                        <b style="color:#879dff">Poki</b>.com - Click to play </button>
+                        <b style="color:#87b3ff">Poki</b>.com - Click to play </button>
                 </li>
                 <div class='meta'>Poki is the ultimate playground with over 1500 free online games. We offer instant play to all our games without downloads, login, popups or other distractions.</div>
             </ul>
         </section>
         <section>
-            <h2>Updates | Notes</h2>
+
+            <h2>Updates | Notes | Info</h2>
+            <div class = 'meta' id="connection-display"></div>
+            <script>
+            const connectionEl = document.getElementById("connection-display");
+            const element = document.getElementById('login-signup-section');
+            element.classList.add('blurred');
+            element.classList.remove('blurred');
+            function updateConnectionStatus() {
+            if (navigator.onLine) {
+                connectionEl.innerHTML =
+                'You are currently <b style="color:#87ffad">connected to the internet</b>';
+                const element = document.getElementById('login-signup-section');
+                element.classList.remove('blurred');
+            } else {
+                connectionEl.innerHTML =
+                'You are currently <b style="color:#ff8787">offline</b>';
+                const element = document.getElementById('login-signup-section');
+                element.classList.add('blurred');
+            }
+            }
+
+            // Initial check
+            updateConnectionStatus();
+
+            // Listen for real changes
+            window.addEventListener("online", updateConnectionStatus);
+            window.addEventListener("offline", updateConnectionStatus);
+
+            </script>
             <div class="meta">Last updated on 12/18/2025 <br>
                 <b>Copyright © 2025 <span style="color:#90ff94">ItsMrEric</span> - Eric Chen </b>
             </div>
@@ -823,12 +974,19 @@ FLOATING PARTICLES
             function openWebsite(url) {
                 window.open(url, '_blank')
             }
+            function checkOpenWebsite(url) {
+                if (window.accountActive) {
+                    window.open(url, '_blank')
+                }
+                else {
+                    showNotice('Login to get access')
+                }
+            }
         </script>
     </body>
 
     </html>
 </div>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
     const SUPABASE_URL = "https://wphkxzhdxwjkqbmascoa.supabase.co";
     const SUPABASE_KEY = "sb_publishable_01AKv7BpIjY6dg1JZzXG-Q_Z6rKIUPv";
@@ -852,12 +1010,34 @@ FLOATING PARTICLES
         });
 
         if (error) {
-            showTopMessage("Invalid username or password");
+            showNotice("Invalid username or password");
             return;
         }
-        showTopMessage("Logged in!");
+        showPage('page-main')
+        showAccountElement()
+        removeLoginSignupElement()
+        showNotice("Logged in!");
+        window.accountName = username
+        window.accountActive = true
+        
     }
+    async function signout() {
+        const { error } = await client.auth.signOut();
 
+        if (error) {
+            showNotice("Error signing out: " + error.message);
+            return;
+        }
+
+        // Optional: You can add any additional logic after signout, like hiding user data
+        window.accountName = null;
+        window.accountActive = false;
+
+        removeAccountElement()
+        showLoginSignupElement()
+
+        showNotice("Logged out successfully!");
+    }
     async function signup(username, password) {
         username = username.trim();
         password = password.trim();
@@ -873,7 +1053,7 @@ FLOATING PARTICLES
         });
 
         if (error) {
-            showTopMessage(error.message);
+            showNotice(error.message);
             return;
         }
 
@@ -887,14 +1067,11 @@ FLOATING PARTICLES
             });
 
         if (profileError) {
-            showTopMessage("Username already taken");
+            showNotice("Username already taken");
             return;
         }
-
-        showTopMessage("Account created!");
         showPage("page-login");
-        window.signup = signup;
-        window.login = login;
+        showNotice("Account created!");
     }
 </script>
 <div id="page-login" hidden>
@@ -1274,48 +1451,14 @@ SIGN UP LINK
                     transform: translateY(-100px); /* Slide up 100px and fade */
                 }
             }
-            #top-notification {
-                position: fixed;
-                top: -60px;
-                left: 50%;
-                transform: translateX(-50%);
-                background: rgba(0, 203, 210, 0.95);
-                color: #000;
-                padding: 14px 28px;
-                border-radius: 0 0 12px 12px;
-                font-family: Orbitron, sans-serif;
-                font-size: 14px;
-                letter-spacing: 1px;
-                box-shadow: 0 8px 25px rgba(0, 203, 210, 0.4);
-                z-index: 9999;
-                opacity: 0;
-                transition: top 0.4s ease, opacity 0.4s ease;
-            }
 
-            #top-notification.show {
-                top: 0;
-                opacity: 1;
-            }
 
         </style>
     </head>
 <script>
-function showTopMessage(text, duration = 3000) {
-    const notif = document.getElementById("top-notification");
-
-    notif.textContent = text;
-    notif.classList.add("show");
-
-    clearTimeout(notif._hideTimeout);
-
-    notif._hideTimeout = setTimeout(() => {
-        notif.classList.remove("show");
-    }, duration);
-}
 </script>
 
     <body>
-        <div id="top-notification"></div>
 
         <div class="title-box">
             <h1>Glad to see you back!</h1>
@@ -1702,7 +1845,6 @@ SIGN UP LINK
     </head>
 
     <body>
-
         <div class="title-box">
             <h1>Grab a new account!</h1>
         </div>
@@ -1738,4 +1880,22 @@ SIGN UP LINK
         document.getElementById('page-signup').hidden = true;
         document.getElementById(id).hidden = false;
     }
+</script>
+<div id="notice-container"></div>
+<script>
+function showNotice(message, type = "info", duration = 3000) {
+  const container = document.getElementById("notice-container");
+  if (!container) return;
+
+  const notice = document.createElement("div");
+  notice.className = `notice ${type}`;
+  notice.innerHTML = message;
+
+  container.appendChild(notice);
+
+  setTimeout(() => {
+    notice.classList.add("hide");
+    setTimeout(() => notice.remove(), 400);
+  }, duration);
+}
 </script>
