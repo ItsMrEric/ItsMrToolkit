@@ -3,7 +3,6 @@
 /* =========================
 CUSTOM NOTICE SYSTEM
 ========================= */
-
 #notice-container {
   position: fixed;
   top: 30px;
@@ -20,47 +19,39 @@ CUSTOM NOTICE SYSTEM
   font-family: Orbitron, sans-serif;
   font-size: 0.9rem;
   color: #e6f1ff;
-  background: linear-gradient(145deg, #0a1230, #070b1d);
-  border: 1px solid rgba(0, 246, 255, 0.4);
+  text-shadow: 0 0 12px #004a4d, 0 0 30px #005356;
+  background: linear-gradient(145deg, #0b1583, #2943b9);
   border-radius: 12px;
-  box-shadow: 0 0 22px rgba(0, 246, 255, 0.35);
+    box-shadow: inset 0 0 30px rgba(0, 246, 255, .08);
   opacity: 0;
   transform: translateX(40px);
-  animation: noticeIn 0.4s ease forwards;
+  max-height: 200px;
+
+  transition:
+    opacity 0.35s ease,
+    transform 0.35s ease,
+    max-height 0.35s ease,
+    margin 0.35s ease,
+    padding 0.35s ease;
 }
 
-.notice.success {
-  border-color: #87ffad;
-  box-shadow: 0 0 24px rgba(135, 255, 173, 0.5);
-}
-
-.notice.error {
-  border-color: #ff8787;
-  box-shadow: 0 0 24px rgba(255, 135, 135, 0.5);
-}
-
-.notice.info {
-  border-color: #87cfff;
-  box-shadow: 0 0 24px rgba(135, 207, 255, 0.5);
+.notice.show {
+  opacity: 1;
+  transform: translateX(0);
+  max-height: 200px;
 }
 
 .notice.hide {
-  animation: noticeOut 0.4s ease forwards;
+  opacity: 0;
+  transform: translateX(40px);
+
+  /* 🔑 collapse layout */
+  max-height: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+  margin: 0;
 }
 
-@keyframes noticeIn {
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-@keyframes noticeOut {
-  to {
-    opacity: 0;
-    transform: translateX(40px);
-  }
-}
 </style>
 <script>
     window.accountActive = false;
@@ -635,6 +626,29 @@ ENERGY BORDER EFFECT
                     background-position: 200% 0%, 0% 200%;
                 }
             }
+        .login-wrapper {
+            position: relative;
+        }
+
+        /* Overlay text */
+        .login-overlay-text {
+            position: absolute;
+            inset: 0;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 4rem;
+            font-weight: 800;
+            letter-spacing: 0.15em;
+
+            color: white;
+            text-shadow: 0 0 20px rgba(0,0,0,0.6);
+
+            pointer-events: none; /* clicks pass through */
+            z-index: 10;
+        }
 
             /* =========================
 FLOATING PARTICLES
@@ -736,22 +750,30 @@ FLOATING PARTICLES
             }
             document.getElementById('account-section').style.display = 'none'
         </script>
-        <section id="login-signup-section">
-            <h2>Signup / Login</h2>
-            <div class="meta">If you are a admin or you just simply wants to do this</div>
-            <ul>
-                <li>
-                    <button onclick="showPage('page-login')">
-                        <b>-> <span style="color:#a1adff">Login</span>
-                            <- </b> Enter your username and password </button>
-                </li>
-                <li>
-                    <button onclick="showPage('page-signup')">
-                        <b>-> <span style="color:#a1ffa6">signup</span>
-                            <- </b> Create an account with a username and password </button>
-                </li>
-            </ul>
-        </section>
+<div class="login-wrapper">
+    <section id="login-signup-section">
+        <h2>Signup / Login</h2>
+        <div class="meta">If you are a admin or you just simply wants to do this</div>
+        <ul>
+            <li>
+                <button onclick="showPage('page-login')">
+                    <b>-> <span style="color:#a1adff">Login</span> <-</b>
+                    Enter your username and password
+                </button>
+            </li>
+            <li>
+                <button onclick="showPage('page-signup')">
+                    <b>-> <span style="color:#a1ffa6">Signup</span> <-</b>
+                    Create an account with a username and password
+                </button>
+            </li>
+        </ul>
+    </section>
+
+    <!-- 🔥 Overlay text (NOT inside section) -->
+    <div class="login-overlay-text" id="login-overlay-text"></div>
+</div>
+
         <script>
             function showLoginSignupElement() {
                 document.getElementById('login-signup-section').style.display = 'block'
@@ -920,7 +942,7 @@ FLOATING PARTICLES
                         <b style="color:#87ff8b">Bloxd</b>.io - Click to play </button>
                 </li>
                 <div class='meta'>Web Game <br>Join bloxd with a collection of online games like bedwars, skywars. Build, pvp, and explore in block worlds. <br>
-                    <b>Sadly, Bloxd can not be played in school, and thats all I currently know. But you can access it via Opera GX with VPN. Get more in the main tutorial document.</b>
+                    <b>Sadly, Bloxd can not be played in school, and thats all I currently know. But you can access it via Opera GX with VPN (real slow). Get more in the main tutorial document.</b>
                 </div>
                 <li>
                     <button onclick="openWebsite('https://www.kour.io')">
@@ -942,19 +964,20 @@ FLOATING PARTICLES
             <script>
             const connectionEl = document.getElementById("connection-display");
             const element = document.getElementById('login-signup-section');
-            element.classList.add('blurred');
-            element.classList.remove('blurred');
             function updateConnectionStatus() {
             if (navigator.onLine) {
                 connectionEl.innerHTML =
                 'You are currently <b style="color:#87ffad">connected to the internet</b>';
                 const element = document.getElementById('login-signup-section');
                 element.classList.remove('blurred');
+                document.getElementById('login-overlay-text').innerHTML = ''
             } else {
                 connectionEl.innerHTML =
                 'You are currently <b style="color:#ff8787">offline</b>';
                 const element = document.getElementById('login-signup-section');
                 element.classList.add('blurred');
+                
+                document.getElementById('login-overlay-text').innerHTML = "You're <b style=color:#ff8787> offline</b>"
             }
             }
 
@@ -1893,9 +1916,17 @@ function showNotice(message, type = "info", duration = 3000) {
 
   container.appendChild(notice);
 
+  // trigger enter animation
+  requestAnimationFrame(() => {
+    notice.classList.add("show");
+  });
+
   setTimeout(() => {
     notice.classList.add("hide");
-    setTimeout(() => notice.remove(), 400);
+
+    // remove AFTER collapse finishes
+    setTimeout(() => notice.remove(), 350);
   }, duration);
 }
+
 </script>
